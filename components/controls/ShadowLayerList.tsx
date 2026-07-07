@@ -68,7 +68,7 @@ export function ShadowLayerList({
       {/* Header */}
       <div className="flex items-center justify-between">
         <span
-          className="text-[11px] font-semibold tracking-[0.08em] uppercase"
+          className="text-xs font-medium"
           style={{ color: "var(--text-muted)" }}
         >
           Layers
@@ -112,28 +112,11 @@ export function ShadowLayerList({
               onDragOver={(e) => handleDragOver(e, shadow.id)}
               onDragEnd={handleDragEnd}
               onClick={() => onSelect(shadow.id)}
-              className="group flex items-center gap-2 px-2.5 py-2 rounded-xl cursor-pointer animate-slide-in"
+              className="group flex items-center gap-2 px-2.5 py-2 rounded-xl cursor-pointer animate-slide-in hover:opacity-100"
               style={{
-                background: isActive
-                  ? "rgba(94,158,136,0.08)"
-                  : "rgba(255,255,255,0.03)",
-                border: isActive
-                  ? "1px solid rgba(94,158,136,0.22)"
-                  : "1px solid rgba(255,255,255,0.06)",
+                background: isActive ? "rgba(94,158,136,0.08)" : "transparent",
                 opacity: isVisible ? 1 : 0.45,
                 transition: "all 0.15s ease",
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = "rgba(255,255,255,0.05)";
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = "rgba(255,255,255,0.03)";
-                  e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)";
-                }
               }}
             >
               {/* Drag handle */}

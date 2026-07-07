@@ -71,16 +71,10 @@ export default function Home() {
             />
           </div>
           <span
-            className="font-semibold text-sm tracking-tight"
-            style={{ color: "var(--text)", fontFamily: "var(--font-serif)" }}
+            className="font-semibold text-sm"
+            style={{ color: "var(--text)" }}
           >
             Shadow Studio
-          </span>
-          <span
-            className="hidden sm:block text-[11px]"
-            style={{ color: "var(--text-faint)" }}
-          >
-            CSS · Tailwind · Flutter
           </span>
         </div>
 
@@ -116,19 +110,11 @@ export default function Home() {
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className="w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-150 active:scale-90"
+            className="w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-150 active:scale-90 hover:bg-white/5 hover:text-[var(--text)]"
             style={{
               background: "rgba(128,128,128,0.08)",
               border: "1px solid var(--border)",
               color: "var(--text-muted)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = "var(--text)";
-              e.currentTarget.style.borderColor = "var(--border-hover)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = "var(--text-muted)";
-              e.currentTarget.style.borderColor = "var(--border)";
             }}
             aria-label="Toggle theme"
           >
@@ -171,8 +157,7 @@ export default function Home() {
                   background: "var(--border)",
                   flexShrink: 0,
                 }}
-              >
-              </div>
+              ></div>
 
               {/* Controls section */}
               {activeShadow && (
@@ -244,8 +229,6 @@ export default function Home() {
                   className="text-xl mb-1"
                   style={{
                     color: "var(--text)",
-                    fontFamily: "var(--font-serif)",
-                    fontStyle: "italic",
                   }}
                 >
                   Shadow Presets

@@ -34,7 +34,7 @@ function SliderRow({
     <div className="flex flex-col gap-2">
       <div className="flex justify-between items-center">
         <label
-          className="text-[11px] font-semibold tracking-[0.08em] uppercase"
+          className="text-xs font-medium"
           style={{ color: "var(--text-muted)" }}
         >
           {label}
@@ -254,7 +254,7 @@ export function ShadowLayerControls({ shadow, onChange }: Props) {
         {/* Color swatch + label */}
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
           <label
-            className="text-[11px] font-semibold tracking-[0.08em] uppercase shrink-0"
+            className="text-xs font-medium shrink-0"
             style={{ color: "var(--text-muted)" }}
           >
             Color
@@ -283,7 +283,7 @@ export function ShadowLayerControls({ shadow, onChange }: Props) {
         {/* Inset toggle */}
         <div className="flex items-center gap-2 shrink-0">
           <label
-            className="text-[11px] font-semibold tracking-[0.08em] uppercase"
+            className="text-xs font-medium"
             style={{ color: "var(--text-muted)" }}
           >
             Inset

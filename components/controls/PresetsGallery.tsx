@@ -66,16 +66,12 @@ export function PresetsGallery({ onLoad }: Props) {
                 animationDelay: `${i * 0.03}s`,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(94,158,136,0.25)";
+                e.currentTarget.style.borderColor = "rgba(94,158,136,0.3)";
                 e.currentTarget.style.background = "var(--surface-raised)";
-                e.currentTarget.style.transform = "translateY(-2px)";
-                e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,0,0,0.3)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
                 e.currentTarget.style.background = "var(--surface)";
-                e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "none";
               }}
             >
               {/* Mini preview */}

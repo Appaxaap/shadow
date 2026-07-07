@@ -5,6 +5,7 @@
     --bg: #0b1414;
     --surface: #111c1c;
     --surface-raised: #172020;
+    --surface-code: #0b1313;
     --border: rgba(255, 255, 255, 0.07);
     --border-hover: rgba(255, 255, 255, 0.13);
     --text: #bdc1bb;
@@ -20,6 +21,7 @@ html.light {
     --bg: #eef2f2;
     --surface: #ffffff;
     --surface-raised: #f0f5f5;
+    --surface-code: #f5f7f7;
     --border: rgba(0, 0, 0, 0.08);
     --border-hover: rgba(0, 0, 0, 0.14);
     --text: #0f2020;

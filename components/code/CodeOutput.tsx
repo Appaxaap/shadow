@@ -139,33 +139,13 @@ export function CodeOutput({ shadows, getShareUrl, panelMode = false }: Props) {
           className="rounded-xl overflow-hidden h-full flex flex-col"
           style={{
             border: "1px solid var(--border)",
-            background: "linear-gradient(180deg, #0d1616, #0b1313)",
+            background: "var(--surface-code)",
           }}
         >
-          <div
-            className="flex items-center gap-2 px-3 py-2 text-[11px]"
-            style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}
-          >
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ background: "#c96060", opacity: 0.85 }}
-            />
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ background: "#b08040", opacity: 0.85 }}
-            />
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ background: "#5e9e88", opacity: 0.9 }}
-            />
-            <span className="ml-1" style={{ color: "#7a9f96" }}>
-              Generated output
-            </span>
-          </div>
           <pre
             className="px-4 py-3 text-[13px] font-mono leading-relaxed overflow-auto whitespace-pre flex-1"
             style={{
-              color: "#8ecfb8",
+              color: "var(--accent)",
               maxHeight: panelMode ? "none" : 176,
               minHeight: panelMode ? 0 : 120,
             }}
