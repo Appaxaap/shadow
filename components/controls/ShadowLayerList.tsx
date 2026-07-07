@@ -26,12 +26,14 @@ export function ShadowLayerList({
   onToggleVisibility,
   onReorder,
 }: Props) {
+  // Drag state in refs — zero re-renders during drag
   const dragId = useRef<string | null>(null);
   const dragOverId = useRef<string | null>(null);
 
   function handleDragStart(e: React.DragEvent, id: string) {
     dragId.current = id;
     e.dataTransfer.effectAllowed = "move";
+    // Minimal ghost — just the element itself
     e.dataTransfer.setDragImage(e.currentTarget as HTMLElement, 12, 12);
   }
 
@@ -62,36 +64,41 @@ export function ShadowLayerList({
   }
 
   return (
-    <div className="flex flex-col" style={{ gap: 12 }}>
-      {/* Add layer — subtle text action */}
-      <button
-        onClick={onAdd}
-        className="sg-transition"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-          background: "none",
-          border: "none",
-          padding: 0,
-          cursor: "pointer",
-          color: "var(--text-muted)",
-          fontSize: 11,
-          fontWeight: 450,
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = "var(--text)")}
-        onMouseLeave={(e) =>
-          (e.currentTarget.style.color = "var(--text-muted)")
-        }
-      >
-        <Plus size={12} strokeWidth={1.5} />
-        Add shadow layer
-      </button>
+    <div className="flex flex-col gap-2.5">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <span
+          className="text-xs font-medium"
+          style={{ color: "var(--text-muted)" }}
+        >
+          Layers
+        </span>
+        <button
+          onClick={onAdd}
+          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl transition-all duration-150 active:scale-95"
+          style={{
+            color: "var(--accent)",
+            background: "color-mix(in srgb, var(--accent) 10%, transparent)",
+            border:
+              "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.background =
+              "color-mix(in srgb, var(--accent) 18%, transparent)")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.background =
+              "color-mix(in srgb, var(--accent) 10%, transparent)")
+          }
+        >
+          <Plus size={13} strokeWidth={2.5} />
+          Add layer
+        </button>
+      </div>
 
       {/* Layer rows */}
       <div
-        className="flex flex-col"
-        style={{ gap: 4 }}
+        className="flex flex-col gap-1.5"
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
       >
@@ -108,20 +115,13 @@ export function ShadowLayerList({
               onDragOver={(e) => handleDragOver(e, shadow.id)}
               onDragEnd={handleDragEnd}
               onClick={() => onSelect(shadow.id)}
-              className="group flex items-center gap-2.5 sg-transition"
+              className="group flex items-center gap-2 px-2.5 py-2 rounded-xl cursor-pointer animate-slide-in hover:opacity-100"
               style={{
-                padding: "6px 8px",
-                borderRadius: 6,
-                background: isActive ? "var(--surface-hover)" : "transparent",
-                opacity: isVisible ? 1 : 0.4,
-                cursor: "pointer",
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive)
-                  e.currentTarget.style.background = "var(--surface-hover)";
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) e.currentTarget.style.background = "transparent";
+                background: isActive
+                  ? "color-mix(in srgb, var(--accent) 8%, transparent)"
+                  : "transparent",
+                opacity: isVisible ? 1 : 0.45,
+                transition: "all 0.15s ease",
               }}
             >
               {/* Drag handle */}
@@ -130,119 +130,99 @@ export function ShadowLayerList({
                 style={{ color: "var(--text-faint)" }}
                 onClick={(e) => e.stopPropagation()}
               >
-                <GripVertical size={12} strokeWidth={1.5} />
+                <GripVertical size={13} />
               </span>
 
               {/* Color dot */}
               <div
-                className="shrink-0"
+                className="w-4 h-4 rounded-md shrink-0"
                 style={{
-                  width: 14,
-                  height: 14,
-                  borderRadius: "50%",
                   backgroundColor: previewColor,
+                  border: "1.5px solid rgba(255,255,255,0.1)",
                 }}
               />
 
               {/* Label */}
               <span
-                className="flex-1 truncate sg-label"
+                className="flex-1 text-sm font-medium truncate"
                 style={{
-                  fontWeight: isActive ? 500 : 400,
-                  color: isActive ? "var(--text)" : "var(--text-muted)",
+                  color: isActive ? "var(--accent)" : "var(--text)",
                   textDecoration: isVisible ? "none" : "line-through",
-                  fontSize: 12,
                 }}
               >
                 Layer {i + 1}
                 {shadow.inset && (
                   <span
-                    style={{
-                      color: "var(--text-faint)",
-                      marginLeft: 6,
-                      fontSize: 10.5,
-                    }}
+                    className="ml-1.5 text-[11px] font-normal"
+                    style={{ color: "var(--text-faint)" }}
                   >
                     inset
                   </span>
                 )}
               </span>
 
-              {/* Actions — appear on hover */}
-              <div
-                className="flex items-center"
-                style={{ gap: 1, opacity: 0, transition: "opacity 0.15s ease" }}
-                onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-                onMouseLeave={(e) => (e.currentTarget.style.opacity = "0")}
-                onClick={(e) => e.stopPropagation()}
-              >
+              {/* Actions */}
+              <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                {/* Visibility */}
                 <button
-                  onClick={() => onToggleVisibility(shadow.id)}
-                  className="sg-transition"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    padding: 4,
-                    cursor: "pointer",
-                    borderRadius: 4,
-                    color: "var(--text-faint)",
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleVisibility(shadow.id);
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "var(--text)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "var(--text-faint)")
-                  }
+                  className="p-1.5 rounded-xl transition-all active:scale-90"
+                  style={{ color: "var(--text-muted)" }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                    e.currentTarget.style.color = "var(--text)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "var(--text-muted)";
+                  }}
                   title={isVisible ? "Hide layer" : "Show layer"}
                 >
-                  {isVisible ? (
-                    <Eye size={11} strokeWidth={1.5} />
-                  ) : (
-                    <EyeOff size={11} strokeWidth={1.5} />
-                  )}
+                  {isVisible ? <Eye size={12} /> : <EyeOff size={12} />}
                 </button>
+                {/* Duplicate */}
                 <button
-                  onClick={() => onDuplicate(shadow.id)}
-                  className="sg-transition"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    padding: 4,
-                    cursor: "pointer",
-                    borderRadius: 4,
-                    color: "var(--text-faint)",
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDuplicate(shadow.id);
                   }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "var(--text)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = "var(--text-faint)")
-                  }
+                  className="p-1.5 rounded-xl transition-all active:scale-90"
+                  style={{ color: "var(--text-muted)" }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "rgba(255,255,255,0.08)";
+                    e.currentTarget.style.color = "var(--text)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.color = "var(--text-muted)";
+                  }}
                   title="Duplicate"
                 >
-                  <Copy size={11} strokeWidth={1.5} />
+                  <Copy size={12} />
                 </button>
+                {/* Remove */}
                 {shadows.length > 1 && (
                   <button
-                    onClick={() => onRemove(shadow.id)}
-                    className="sg-transition"
-                    style={{
-                      background: "none",
-                      border: "none",
-                      padding: 4,
-                      cursor: "pointer",
-                      borderRadius: 4,
-                      color: "var(--text-faint)",
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemove(shadow.id);
                     }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.color = "var(--destructive)")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.color = "var(--text-faint)")
-                    }
+                    className="p-1.5 rounded-xl transition-all active:scale-90"
+                    style={{ color: "var(--text-muted)" }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = "rgba(201,96,96,0.12)";
+                      e.currentTarget.style.color = "var(--destructive)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.color = "var(--text-muted)";
+                    }}
                     title="Remove"
                   >
-                    <Trash2 size={11} strokeWidth={1.5} />
+                    <Trash2 size={12} />
                   </button>
                 )}
               </div>

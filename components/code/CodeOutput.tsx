@@ -9,6 +9,7 @@ import { highlightCode } from "../../lib/syntaxHighlight";
 type Props = {
   shadows: Shadow[];
   getShareUrl: () => string;
+  panelMode?: boolean;
 };
 
 const TABS: { id: ExportFormat; label: string }[] = [
@@ -34,7 +35,7 @@ async function copyText(text: string) {
   }
 }
 
-export function CodeOutput({ shadows, getShareUrl }: Props) {
+export function CodeOutput({ shadows, getShareUrl, panelMode = false }: Props) {
   const [tab, setTab] = useState<ExportFormat>("css");
   const [codeCopied, setCodeCopied] = useState(false);
   const [shareCopied, setShareCopied] = useState(false);
@@ -55,32 +56,42 @@ export function CodeOutput({ shadows, getShareUrl }: Props) {
   }
 
   return (
-    <div className="flex flex-col h-full overflow-hidden" style={{ gap: 0 }}>
-      {/* Toolbar */}
+    <div
+      className="overflow-hidden h-full flex flex-col"
+      style={{
+        borderRadius: panelMode ? 0 : 12,
+        borderTop: panelMode ? "none" : "1px solid var(--border)",
+        borderLeft: panelMode ? "1px solid var(--border)" : "none",
+        borderRight: "1px solid var(--border)",
+        borderBottom: "1px solid var(--border)",
+        background: "var(--surface)",
+      }}
+    >
+      {/* Toolbar — dedicated 54px strip */}
       <div
         className="flex items-center justify-between shrink-0"
-        style={{ height: 44, padding: "0 4px" }}
+        style={{ height: 54, padding: "0 20px" }}
       >
-        {/* Language tabs — editorial text */}
+        {/* Left: language tabs */}
         <div
-          className="flex items-center overflow-x-auto min-w-0"
-          style={{ gap: 10, scrollbarWidth: "none" }}
+          className="flex items-center gap-2 overflow-x-auto min-w-0"
+          style={{ scrollbarWidth: "none" }}
         >
           {TABS.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className="sg-transition"
+              className="shrink-0 px-3 py-1.5 text-xs font-semibold rounded-md whitespace-nowrap transition-all duration-150"
               style={{
-                background: "none",
-                border: "none",
-                padding: "4px 0",
-                cursor: "pointer",
-                fontSize: 10.5,
-                fontWeight: tab === t.id ? 500 : 400,
                 color: tab === t.id ? "var(--text)" : "var(--text-muted)",
-                letterSpacing: "0.02em",
-                whiteSpace: "nowrap",
+                background:
+                  tab === t.id
+                    ? "color-mix(in srgb, var(--surface-raised) 60%, transparent)"
+                    : "transparent",
+                border:
+                  tab === t.id
+                    ? "1px solid var(--border-hover)"
+                    : "1px solid transparent",
               }}
             >
               {t.label}
@@ -88,75 +99,51 @@ export function CodeOutput({ shadows, getShareUrl }: Props) {
           ))}
         </div>
 
-        {/* Actions — subtle text links */}
-        <div className="flex items-center shrink-0" style={{ gap: 8 }}>
+        {/* Right: utility actions */}
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={handleCopy}
-            className="sg-transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 active:scale-95"
             style={{
-              background: "none",
-              border: "none",
-              padding: 0,
-              cursor: "pointer",
-              fontSize: 10.5,
-              fontWeight: 450,
-              color: codeCopied ? "var(--accent)" : "var(--text-faint)",
-              display: "flex",
-              alignItems: "center",
-              gap: 4,
-            }}
-            onMouseEnter={(e) => {
-              if (!codeCopied) e.currentTarget.style.color = "var(--text)";
-            }}
-            onMouseLeave={(e) => {
-              if (!codeCopied)
-                e.currentTarget.style.color = "var(--text-faint)";
+              background: codeCopied
+                ? "color-mix(in srgb, var(--accent) 15%, transparent)"
+                : "rgba(128,128,128,0.1)",
+              color: codeCopied ? "var(--accent)" : "var(--text-muted)",
+              border: `1px solid ${codeCopied ? "color-mix(in srgb, var(--accent) 30%, transparent)" : "var(--border)"}`,
             }}
           >
             {codeCopied ? (
-              <Check size={10} strokeWidth={1.5} />
+              <Check size={11} className="animate-check-pop" />
             ) : (
-              <Copy size={10} strokeWidth={1.5} />
+              <Copy size={11} />
             )}
-            {codeCopied ? "Copied" : "Copy"}
+            {codeCopied ? "Copied!" : "Copy"}
           </button>
           <button
             onClick={handleShare}
-            className="sg-transition"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 active:scale-95"
             style={{
-              background: "none",
-              border: "none",
-              padding: 0,
-              cursor: "pointer",
-              fontSize: 10.5,
-              fontWeight: 450,
-              color: shareCopied ? "var(--accent)" : "var(--text-faint)",
-              display: "flex",
-              alignItems: "center",
-              gap: 4,
-            }}
-            onMouseEnter={(e) => {
-              if (!shareCopied) e.currentTarget.style.color = "var(--text)";
-            }}
-            onMouseLeave={(e) => {
-              if (!shareCopied)
-                e.currentTarget.style.color = "var(--text-faint)";
+              background: shareCopied
+                ? "color-mix(in srgb, var(--accent) 15%, transparent)"
+                : "rgba(128,128,128,0.1)",
+              color: shareCopied ? "var(--accent)" : "var(--text-muted)",
+              border: `1px solid ${shareCopied ? "color-mix(in srgb, var(--accent) 30%, transparent)" : "var(--border)"}`,
             }}
           >
             {shareCopied ? (
-              <Check size={10} strokeWidth={1.5} />
+              <Check size={11} className="animate-check-pop" />
             ) : (
-              <Link size={10} strokeWidth={1.5} />
+              <Link size={11} />
             )}
-            {shareCopied ? "Copied" : "Share"}
+            {shareCopied ? "Copied!" : "Share"}
           </button>
         </div>
       </div>
 
-      {/* Divider */}
+      {/* Subtle divider */}
       <div style={{ height: 1, background: "var(--border)", flexShrink: 0 }} />
 
-      {/* Code viewport */}
+      {/* Code viewport — scrolls independently */}
       <div
         className="flex-1 min-h-0 overflow-y-auto"
         style={{ background: "var(--surface-code)" }}
@@ -165,7 +152,7 @@ export function CodeOutput({ shadows, getShareUrl }: Props) {
           className="text-[13px] font-mono leading-relaxed whitespace-pre"
           style={{
             margin: 0,
-            padding: "28px 20px 24px",
+            padding: "28px 24px 24px",
             color: "var(--text)",
             minHeight: "100%",
             boxSizing: "border-box",

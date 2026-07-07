@@ -19,13 +19,11 @@ export function ShadowPreview({ shadows, isLight }: Props) {
   const shadowValue = shadowsToCssValue(shadows);
   const primaryVisible = shadows.find((s) => s.visible !== false);
 
-  // Quieter canvas — reduced contrast, subtle atmosphere
-  const canvasBg = isLight ? "#f0f3f2" : "#0d1818";
-  const dotColor = isLight ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.04)";
+  // Canvas and element colors follow the global theme
+  const canvasBg = isLight ? "#F0F3F2" : "#0e1a1a";
+  const dotColor = isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.055)";
   const elementBg = "#ffffff";
   const textColor = "#1A2828";
-
-  // Mute the stage (surface behind the object) based on shadow luminance
   const shadowColor = primaryVisible?.color ?? "#000000";
   const clean = shadowColor.replace("#", "");
   const full =
@@ -42,13 +40,13 @@ export function ShadowPreview({ shadows, isLight }: Props) {
     Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)
       ? 0
       : (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
-  const stageBg = luminance < 0.45 ? "#f0f4f3" : "#102020";
+  const stageBg = luminance < 0.45 ? "#F8FBFA" : "#132121";
   const stageBorder =
-    luminance < 0.45 ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
+    luminance < 0.45 ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.08)";
 
   const dotGrid = {
-    backgroundImage: `radial-gradient(circle, ${dotColor} 1px, transparent 1px)`,
-    backgroundSize: "24px 24px",
+    backgroundImage: `radial-gradient(circle, ${dotColor} 1.5px, transparent 1.5px)`,
+    backgroundSize: "22px 22px",
   };
 
   return (
@@ -60,83 +58,81 @@ export function ShadowPreview({ shadows, isLight }: Props) {
         ...dotGrid,
       }}
     >
-      {/* Shape selector — minimal text buttons */}
-      <div
-        className="absolute flex items-center"
-        style={{ gap: 8, top: 16, left: 20, zIndex: 10 }}
-      >
-        {SHAPES.map((s) => {
-          const active = s.value === shape;
-          return (
-            <button
-              key={s.value}
-              onClick={() => setShape(s.value)}
-              className="sg-transition"
-              style={{
-                background: "none",
-                border: "none",
-                padding: "4px 0",
-                cursor: "pointer",
-                fontSize: 11,
-                fontWeight: active ? 500 : 400,
-                color: active ? "var(--text)" : "var(--text-faint)",
-                letterSpacing: "0.02em",
-              }}
-            >
-              {s.label}
-            </button>
-          );
-        })}
+      {/* Floating shape selector — top-left overlay */}
+      <div className="absolute top-3 left-3 z-10">
+        <div
+          className="flex items-center gap-0.5 p-0.5 rounded-xl"
+          style={{
+            background: isLight
+              ? "rgba(255,255,255,0.75)"
+              : "rgba(11,20,20,0.75)",
+            border: "1px solid var(--border)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+          }}
+        >
+          {SHAPES.map((s) => {
+            const active = s.value === shape;
+            return (
+              <button
+                key={s.value}
+                onClick={() => setShape(s.value)}
+                className="px-3 py-1.5 text-xs font-semibold rounded-xl transition-all"
+                style={{
+                  background: active ? "var(--surface-raised)" : "transparent",
+                  color: active ? "var(--text)" : "var(--text-muted)",
+                  border: active
+                    ? "1px solid var(--border-hover)"
+                    : "1px solid transparent",
+                }}
+              >
+                {s.label}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      {/* Preview object — centered with generous breathing room */}
-      <div
-        className="absolute inset-0 flex items-center justify-center"
-        style={{ padding: 48 }}
-      >
+      {/* Centered preview element */}
+      <div className="absolute inset-0 flex items-center justify-center">
         <div
+          className="rounded-3xl p-8 sm:p-10"
           style={{
             background: stageBg,
             border: `1px solid ${stageBorder}`,
-            borderRadius: 16,
-            padding: 40,
             transition: "background 0.2s ease, border-color 0.2s ease",
           }}
         >
           {shape === "box" && (
             <div
-              className="w-32 h-32"
+              className="w-32 h-32 rounded-2xl"
               style={{
                 background: elementBg,
                 boxShadow: shadowValue,
-                transition: "box-shadow 0.2s ease",
+                transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
               }}
             />
           )}
 
           {shape === "circle" && (
             <div
-              className="w-32 h-32"
+              className="w-32 h-32 rounded-full"
               style={{
                 background: elementBg,
-                borderRadius: "50%",
                 boxShadow: shadowValue,
-                transition: "box-shadow 0.2s ease",
+                transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
               }}
             />
           )}
 
           {shape === "button" && (
             <div
-              className="px-8 py-3.5 select-none"
+              className="px-8 py-3.5 rounded-full font-semibold text-sm select-none"
               style={{
                 background: elementBg,
                 color: textColor,
-                borderRadius: 9999,
-                fontSize: 13,
-                fontWeight: 500,
                 boxShadow: shadowValue,
-                transition: "box-shadow 0.2s ease",
+                transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
               }}
             >
               Click me
@@ -145,54 +141,32 @@ export function ShadowPreview({ shadows, isLight }: Props) {
 
           {shape === "card" && (
             <div
-              className="w-60 p-5 flex flex-col"
+              className="w-60 rounded-2xl p-5 flex flex-col gap-3"
               style={{
                 background: elementBg,
-                borderRadius: 12,
-                gap: 12,
                 boxShadow: shadowValue,
-                transition: "box-shadow 0.2s ease",
+                transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
               }}
             >
               <div
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 8,
-                  background: "#E8ECEA",
-                }}
+                className="w-9 h-9 rounded-xl"
+                style={{ background: "#EEF2F0" }}
               />
               <div
-                style={{
-                  height: 10,
-                  borderRadius: 4,
-                  width: "70%",
-                  background: "#E8ECEA",
-                }}
+                className="h-2.5 rounded-full w-3/4"
+                style={{ background: "#E8ECEA" }}
               />
               <div
-                style={{
-                  height: 8,
-                  borderRadius: 4,
-                  width: "100%",
-                  background: "#EEF2F0",
-                }}
+                className="h-2 rounded-full w-full"
+                style={{ background: "#F0F3F2" }}
               />
               <div
-                style={{
-                  height: 8,
-                  borderRadius: 4,
-                  width: "80%",
-                  background: "#EEF2F0",
-                }}
+                className="h-2 rounded-full w-5/6"
+                style={{ background: "#F0F3F2" }}
               />
               <div
-                style={{
-                  height: 8,
-                  borderRadius: 4,
-                  width: "60%",
-                  background: "#EEF2F0",
-                }}
+                className="h-2 rounded-full w-4/6"
+                style={{ background: "#F0F3F2" }}
               />
             </div>
           )}
