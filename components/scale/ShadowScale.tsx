@@ -37,7 +37,7 @@ function generateScale(
     } else if (style === "spread") {
       value = `0 ${yMult}px ${blurMult}px ${Math.abs(spreadMult)}px ${rgba}`;
     } else {
-      // colored — three layers
+      // colored - three layers
       const rgba2 = hexToRgba(color, opacity * 0.4);
       const rgba3 = hexToRgba(color, opacity * 0.15);
       value = `0 ${yMult}px ${blurMult}px ${spreadMult}px ${rgba}, 0 ${Math.round(yMult * 0.3)}px ${Math.round(blurMult * 0.4)}px 0 ${rgba2}, 0 0 0 ${Math.round(yMult * 0.25)}px ${rgba3}`;

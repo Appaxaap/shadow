@@ -77,7 +77,7 @@ function tokenize(code: string): Token[] {
   let i = 0;
 
   while (i < code.length) {
-    // Whitespace — pass through
+    // Whitespace - pass through
     if (/\s/.test(code[i])) {
       let j = i + 1;
       while (j < code.length && /\s/.test(code[j])) j++;
@@ -212,7 +212,7 @@ function tokenize(code: string): Token[] {
       continue;
     }
 
-    // Word — could be keyword, property, function, type, CSS directive
+    // Word - could be keyword, property, function, type, CSS directive
     if (/[a-zA-Z_$\-]/.test(code[i]) || code[i] === "@") {
       let j = i + 1;
       // CSS vars start with --
@@ -253,7 +253,7 @@ function tokenize(code: string): Token[] {
       continue;
     }
 
-    // CSS pseudo (:hover, ::before) — but not :: in Flutter
+    // CSS pseudo (:hover, ::before) - but not :: in Flutter
     if (code[i] === ":") {
       if (code[i + 1] === ":") {
         tokens.push({ t: "d", v: "::" });
@@ -277,7 +277,7 @@ function tokenize(code: string): Token[] {
       continue;
     }
 
-    // Anything else — pass through
+    // Anything else - pass through
     tokens.push({ t: "v", v: code[i] });
     i++;
   }

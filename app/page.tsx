@@ -73,7 +73,7 @@ export default function Home() {
             className="font-semibold text-sm"
             style={{ color: "var(--text)" }}
           >
-            Shadow Studio
+            Layerbox
           </span>
         </div>
 

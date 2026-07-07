@@ -26,14 +26,14 @@ export function ShadowLayerList({
   onToggleVisibility,
   onReorder,
 }: Props) {
-  // Drag state in refs — zero re-renders during drag
+  // Drag state in refs - zero re-renders during drag
   const dragId = useRef<string | null>(null);
   const dragOverId = useRef<string | null>(null);
 
   function handleDragStart(e: React.DragEvent, id: string) {
     dragId.current = id;
     e.dataTransfer.effectAllowed = "move";
-    // Minimal ghost — just the element itself
+    // Minimal ghost - just the element itself
     e.dataTransfer.setDragImage(e.currentTarget as HTMLElement, 12, 12);
   }
 

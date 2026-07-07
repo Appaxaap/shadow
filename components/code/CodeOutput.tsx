@@ -67,12 +67,12 @@ export function CodeOutput({ shadows, getShareUrl, panelMode = false }: Props) {
         background: "var(--surface)",
       }}
     >
-      {/* Toolbar — dedicated 54px strip */}
+      {/* Toolbar - dedicated 54px strip */}
       <div
         className="flex items-center justify-between shrink-0"
         style={{ height: 54, padding: "0 20px" }}
       >
-        {/* Left: language tabs — flex-1 constrains width, overflow-x-auto scrolls when needed */}
+        {/* Left: language tabs - flex-1 constrains width, overflow-x-auto scrolls when needed */}
         <div
           className="flex items-center gap-2 overflow-x-auto flex-1 min-w-0"
           style={{ scrollbarWidth: "none" }}
@@ -143,7 +143,7 @@ export function CodeOutput({ shadows, getShareUrl, panelMode = false }: Props) {
       {/* Subtle divider */}
       <div style={{ height: 1, background: "var(--border)", flexShrink: 0 }} />
 
-      {/* Code viewport — scrolls independently */}
+      {/* Code viewport - scrolls independently */}
       <div
         className="flex-1 min-h-0 overflow-y-auto"
         style={{ background: "var(--surface-code)" }}

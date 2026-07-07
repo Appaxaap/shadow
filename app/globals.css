@@ -68,7 +68,7 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
-    /* overflow stays default — never hidden on body/html, that breaks position:fixed portals */
+    /* overflow stays default - never hidden on body/html, that breaks position:fixed portals */
 }
 
 html {

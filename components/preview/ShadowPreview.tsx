@@ -58,7 +58,7 @@ export function ShadowPreview({ shadows, isLight }: Props) {
         ...dotGrid,
       }}
     >
-      {/* Floating shape selector — top-left overlay */}
+      {/* Floating shape selector - top-left overlay */}
       <div className="absolute top-3 left-3 z-10">
         <div
           className="flex items-center gap-0.5 p-0.5 rounded-xl"

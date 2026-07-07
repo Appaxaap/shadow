@@ -1,4 +1,4 @@
-# Shadow Studio
+# Layerbox
 
 A professional CSS box-shadow generator with multi-layer support, real-time preview, and code export in multiple formats.
 

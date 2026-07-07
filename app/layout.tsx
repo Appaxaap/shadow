@@ -10,7 +10,7 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "Shadow Studio — Professional Shadow Workflow Tool",
+  title: "Layerbox - Professional Shadow Workflow Tool",
   description:
     "Free online CSS box shadow generator. Build multi-layer shadows visually, preview in real-time, and copy CSS, Tailwind, or React code instantly.",
   keywords: [
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   ],
 };
 
-// Runs synchronously before any paint — prevents theme flash
+// Runs synchronously before any paint - prevents theme flash
 const themeScript = `
 try {
   if (localStorage.getItem('sg-theme') === 'light') {
