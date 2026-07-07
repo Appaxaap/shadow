@@ -9,6 +9,7 @@ import { ShadowLayerList } from "../components/controls/ShadowLayerList";
 import { DepthMeter } from "../components/controls/DepthMeter";
 import { ShadowDNA } from "../components/code/ShadowDNA";
 import { ShadowPalette } from "../components/controls/ShadowPalette";
+import { NaturalLanguageInput } from "../components/controls/NaturalLanguageInput";
 import { ShadowPreview } from "../components/preview/ShadowPreview";
 import { useShadowState } from "../hooks/useShadowState";
 import { ShadowScale } from "../components/scale/ShadowScale";
@@ -164,6 +165,11 @@ export default function Home() {
                 borderBottom: "1px solid var(--border)",
               }}
             >
+              {/* Natural Language Input */}
+              <div className="p-4 pb-0">
+                <NaturalLanguageInput onApply={loadPreset} />
+              </div>
+
               {/* Layers section */}
               <div className="p-4">
                 <ShadowLayerList
