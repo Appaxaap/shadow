@@ -27,6 +27,10 @@ Built with Next.js 16, React 19, and Tailwind CSS v4.
 - **Color Picker** -- react-colorful
 - **Components** -- Radix UI Slider
 
+## Prerequisites
+
+- [Node.js](https://nodejs.org) 18 or later
+
 ## Getting Started
 
 ```bash
@@ -99,6 +103,10 @@ lib/
   presets.ts         -- 40+ preset definitions
 ```
 
+## Contributing
+
+Bug reports and feature requests are welcome via [GitHub Issues](https://github.com/Appaxaap/shadow/issues).
+
 ## License
 
-All rights reserved.
+Distributed under the [MIT License](LICENSE).
