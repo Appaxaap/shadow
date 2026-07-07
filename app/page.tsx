@@ -7,6 +7,7 @@ import { PresetsGallery } from "../components/controls/PresetsGallery";
 import { ShadowLayerControls } from "../components/controls/ShadowLayerControls";
 import { ShadowLayerList } from "../components/controls/ShadowLayerList";
 import { DepthMeter } from "../components/controls/DepthMeter";
+import { ShadowDNA } from "../components/code/ShadowDNA";
 import { ShadowPreview } from "../components/preview/ShadowPreview";
 import { useShadowState } from "../hooks/useShadowState";
 import { ShadowScale } from "../components/scale/ShadowScale";
@@ -208,6 +209,18 @@ export default function Home() {
 
                   {/* Depth Meter */}
                   <DepthMeter onApply={loadPreset} />
+
+                  {/* Divider */}
+                  <div
+                    style={{
+                      height: 1,
+                      background: "var(--border)",
+                      margin: "16px 0",
+                    }}
+                  />
+
+                  {/* Shadow DNA */}
+                  <ShadowDNA shadows={shadows} onLoadDNA={loadPreset} />
                 </div>
               )}
 
