@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Shadow } from "../lib/types";
 import { decodeShadows, encodeShadows, genId } from "../lib/shadowUtils";
+import type { LightState } from "../lib/lightSource";
+import { DEFAULT_LIGHT, lightOffsets } from "../lib/lightSource";
 
 const DEFAULT_SHADOWS: Shadow[] = [
   {
@@ -23,6 +25,7 @@ const MAX_HISTORY = 30;
 export function useShadowState() {
   const [shadows, setShadowsRaw] = useState<Shadow[]>(DEFAULT_SHADOWS);
   const [activeId, setActiveId] = useState<string>("default");
+  const [lightState, setLightState] = useState<LightState>(DEFAULT_LIGHT);
   const [mounted, setMounted] = useState(false);
 
   const history = useRef<Shadow[][]>([DEFAULT_SHADOWS]);
@@ -177,6 +180,34 @@ export function useShadowState() {
     [setShadows],
   );
 
+  const toggleLight = useCallback(() => {
+    setLightState((prev) => ({ ...prev, active: !prev.active }));
+  }, []);
+
+  const setLightPosition = useCallback((lx: number, ly: number) => {
+    setLightState((prev) => ({ ...prev, lx, ly }));
+  }, []);
+
+  /**
+   * Return the effective shadow for display purposes.
+   * When light source is active, x/y are overridden by light calculations.
+   */
+  const computeShadow = useCallback(
+    (s: Shadow): Shadow => {
+      if (!lightState.active) return s;
+      const lift = Math.min(1, (s.blur + Math.abs(s.y)) / 200);
+      const maxOffset = Math.abs(s.x) + Math.abs(s.y) + 10 || 20;
+      const { x, y } = lightOffsets(
+        lightState.lx,
+        lightState.ly,
+        lift,
+        maxOffset,
+      );
+      return { ...s, x, y };
+    },
+    [lightState],
+  );
+
   const getShareUrl = useCallback(() => {
     const url = new URL(window.location.href);
     url.searchParams.set("s", encodeShadows(shadows));
@@ -187,6 +218,10 @@ export function useShadowState() {
     shadows,
     activeId,
     setActiveId,
+    lightState,
+    toggleLight,
+    setLightPosition,
+    computeShadow,
     addLayer,
     removeLayer,
     updateLayer,

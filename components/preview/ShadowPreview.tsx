@@ -3,8 +3,15 @@
 import { useState } from "react";
 import type { PreviewShape, Shadow } from "../../lib/types";
 import { shadowsToCssValue } from "../../lib/shadowUtils";
+import type { LightState } from "../../lib/lightSource";
+import { LightSourceOverlay } from "./LightSourceOverlay";
 
-type Props = { shadows: Shadow[]; isLight: boolean };
+type Props = {
+  shadows: Shadow[];
+  isLight: boolean;
+  lightState?: LightState;
+  onLightChange?: (lx: number, ly: number) => void;
+};
 
 const SHAPES: { label: string; value: PreviewShape }[] = [
   { label: "Box", value: "box" },
@@ -13,7 +20,12 @@ const SHAPES: { label: string; value: PreviewShape }[] = [
   { label: "Card", value: "card" },
 ];
 
-export function ShadowPreview({ shadows, isLight }: Props) {
+export function ShadowPreview({
+  shadows,
+  isLight,
+  lightState,
+  onLightChange,
+}: Props) {
   const [shape, setShape] = useState<PreviewShape>("box");
 
   const shadowValue = shadowsToCssValue(shadows);
@@ -92,6 +104,11 @@ export function ShadowPreview({ shadows, isLight }: Props) {
           })}
         </div>
       </div>
+
+      {/* Light source overlay */}
+      {lightState && onLightChange && (
+        <LightSourceOverlay lightState={lightState} onChange={onLightChange} />
+      )}
 
       {/* Centered preview element */}
       <div className="absolute inset-0 flex items-center justify-center">

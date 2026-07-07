@@ -1,7 +1,7 @@
 "use client";
 
-import { Layers, Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Layers, Lightbulb, Moon, Sun } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { CodeOutput } from "../components/code/CodeOutput";
 import { PresetsGallery } from "../components/controls/PresetsGallery";
 import { ShadowLayerControls } from "../components/controls/ShadowLayerControls";
@@ -21,6 +21,10 @@ export default function Home() {
     duplicateLayer,
     toggleLayerVisibility,
     reorderLayers,
+    lightState,
+    toggleLight,
+    setLightPosition,
+    computeShadow,
     loadPreset,
     getShareUrl,
   } = useShadowState();
@@ -44,7 +48,11 @@ export default function Home() {
     }
   }
 
-  const activeShadow = shadows.find((s) => s.id === activeId);
+  const displayShadows = React.useMemo(
+    () => shadows.map(computeShadow),
+    [shadows, computeShadow],
+  );
+  const activeShadow = displayShadows.find((s) => s.id === activeId);
 
   return (
     <div className="h-screen flex flex-col overflow-hidden sg-page">
@@ -105,6 +113,23 @@ export default function Home() {
               </button>
             ))}
           </div>
+
+          {/* Light source toggle */}
+          <button
+            onClick={toggleLight}
+            className="w-8 h-8 flex items-center justify-center rounded-xl transition-all duration-150 active:scale-90"
+            style={{
+              background: lightState.active
+                ? "color-mix(in srgb, #ffdd44 15%, transparent)"
+                : "rgba(128,128,128,0.08)",
+              border: `1px solid ${lightState.active ? "rgba(255,220,80,0.3)" : "var(--border)"}`,
+              color: lightState.active ? "#ffdd44" : "var(--text-muted)",
+            }}
+            aria-label="Toggle light source"
+            title="Drag a light source to control shadow direction"
+          >
+            <Lightbulb size={14} />
+          </button>
 
           {/* Theme toggle */}
           <button
@@ -189,7 +214,12 @@ export default function Home() {
 
             {/* Center preview */}
             <div className="flex-1 min-w-0 min-h-[320px] lg:min-h-0">
-              <ShadowPreview shadows={shadows} isLight={isLight} />
+              <ShadowPreview
+                shadows={displayShadows}
+                isLight={isLight}
+                lightState={lightState}
+                onLightChange={setLightPosition}
+              />
             </div>
 
             {/* Right code generator */}
@@ -199,7 +229,7 @@ export default function Home() {
             >
               <div className="h-full">
                 <CodeOutput
-                  shadows={shadows}
+                  shadows={displayShadows}
                   getShareUrl={getShareUrl}
                   panelMode
                 />
