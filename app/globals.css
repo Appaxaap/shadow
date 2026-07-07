@@ -11,8 +11,8 @@
     --text: #bdc1bb;
     --text-muted: #6e8a85;
     --text-faint: #364d4d;
-    --accent: #5e9e88;
-    --accent-hover: #4e8e78;
+    --accent: #7c8bff;
+    --accent-hover: #6470e8;
     --destructive: #c96060;
     --header-bg: rgba(11, 20, 20, 0.88);
 
@@ -38,8 +38,8 @@ html.light {
     --text: #0f2020;
     --text-muted: #4a6868;
     --text-faint: #7a9898;
-    --accent: #3d8a72;
-    --accent-hover: #2e7a62;
+    --accent: #5566d8;
+    --accent-hover: #4456c8;
     --destructive: #b04040;
     --header-bg: rgba(238, 242, 242, 0.88);
 
@@ -82,6 +82,27 @@ body {
     font-family: "Satoshi", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle ambient radial glow */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    background: radial-gradient(
+        ellipse 80% 60% at 50% -20%,
+        rgba(124, 139, 255, 0.06),
+        transparent
+    );
+}
+html.light body::before {
+    background: radial-gradient(
+        ellipse 80% 60% at 50% -20%,
+        rgba(85, 102, 216, 0.04),
+        transparent
+    );
 }
 
 .sg-page {

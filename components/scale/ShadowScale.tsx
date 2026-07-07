@@ -344,10 +344,10 @@ export function ShadowScale({ isLight }: { isLight: boolean }) {
               className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-xl transition-all duration-150 active:scale-95"
               style={{
                 background: copied
-                  ? "rgba(94,158,136,0.15)"
+                  ? "color-mix(in srgb, var(--accent) 15%, transparent)"
                   : "rgba(128,128,128,0.1)",
                 color: copied ? "var(--accent)" : "var(--text-muted)",
-                border: `1px solid ${copied ? "rgba(94,158,136,0.3)" : "var(--border)"}`,
+                border: `1px solid ${copied ? "color-mix(in srgb, var(--accent) 30%, transparent)" : "var(--border)"}`,
               }}
             >
               {copied ? (

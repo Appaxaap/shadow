@@ -34,7 +34,9 @@ export function PresetsGallery({ onLoad }: Props) {
                 border: isActive
                   ? "1px solid var(--accent)"
                   : "1px solid rgba(255,255,255,0.07)",
-                boxShadow: isActive ? "0 0 16px rgba(94,158,136,0.25)" : "none",
+                boxShadow: isActive
+                  ? "0 0 16px color-mix(in srgb, var(--accent) 25%, transparent)"
+                  : "none",
               }}
               onMouseEnter={(e) => {
                 if (!isActive)
@@ -66,7 +68,8 @@ export function PresetsGallery({ onLoad }: Props) {
                 animationDelay: `${i * 0.03}s`,
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = "rgba(94,158,136,0.3)";
+                e.currentTarget.style.borderColor =
+                  "color-mix(in srgb, var(--accent) 30%, transparent)";
                 e.currentTarget.style.background = "var(--surface-raised)";
               }}
               onMouseLeave={(e) => {

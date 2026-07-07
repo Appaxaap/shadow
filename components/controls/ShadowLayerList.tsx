@@ -78,14 +78,17 @@ export function ShadowLayerList({
           className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl transition-all duration-150 active:scale-95"
           style={{
             color: "var(--accent)",
-            background: "rgba(94,158,136,0.1)",
-            border: "1px solid rgba(94,158,136,0.2)",
+            background: "color-mix(in srgb, var(--accent) 10%, transparent)",
+            border:
+              "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
           }}
           onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "rgba(94,158,136,0.18)")
+            (e.currentTarget.style.background =
+              "color-mix(in srgb, var(--accent) 18%, transparent)")
           }
           onMouseLeave={(e) =>
-            (e.currentTarget.style.background = "rgba(94,158,136,0.1)")
+            (e.currentTarget.style.background =
+              "color-mix(in srgb, var(--accent) 10%, transparent)")
           }
         >
           <Plus size={13} strokeWidth={2.5} />
@@ -114,7 +117,9 @@ export function ShadowLayerList({
               onClick={() => onSelect(shadow.id)}
               className="group flex items-center gap-2 px-2.5 py-2 rounded-xl cursor-pointer animate-slide-in hover:opacity-100"
               style={{
-                background: isActive ? "rgba(94,158,136,0.08)" : "transparent",
+                background: isActive
+                  ? "color-mix(in srgb, var(--accent) 8%, transparent)"
+                  : "transparent",
                 opacity: isVisible ? 1 : 0.45,
                 transition: "all 0.15s ease",
               }}

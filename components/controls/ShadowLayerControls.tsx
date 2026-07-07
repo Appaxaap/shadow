@@ -60,7 +60,7 @@ function SliderRow({
         step={step}
       >
         <Slider.Track
-          className="relative grow rounded-full h-1.5 overflow-hidden"
+          className="relative grow rounded-full h-1 overflow-hidden"
           style={{ background: "var(--surface-raised)" }}
         >
           <Slider.Range
@@ -69,24 +69,34 @@ function SliderRow({
           />
         </Slider.Track>
         <Slider.Thumb
-          className="block w-[16px] h-[16px] rounded-full outline-none cursor-pointer"
+          className="block w-4 h-4 rounded-full outline-none cursor-pointer"
           style={{
             background: "white",
             border: "2px solid var(--accent)",
-            transition: "transform 0.15s cubic-bezier(0.34,1.56,0.64,1)",
+            boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
+            transition:
+              "transform 0.15s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.15s ease",
           }}
-          onMouseEnter={(e) =>
-            ((e.target as HTMLElement).style.transform = "scale(1.25)")
-          }
-          onMouseLeave={(e) =>
-            ((e.target as HTMLElement).style.transform = "scale(1)")
-          }
-          onFocus={(e) =>
-            ((e.target as HTMLElement).style.transform = "scale(1.25)")
-          }
-          onBlur={(e) =>
-            ((e.target as HTMLElement).style.transform = "scale(1)")
-          }
+          onMouseEnter={(e) => {
+            const el = e.currentTarget;
+            el.style.transform = "scale(1.25)";
+            el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.35)";
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget;
+            el.style.transform = "scale(1)";
+            el.style.boxShadow = "0 1px 4px rgba(0,0,0,0.3)";
+          }}
+          onFocus={(e) => {
+            const el = e.currentTarget;
+            el.style.transform = "scale(1.25)";
+            el.style.boxShadow = "0 2px 8px rgba(0,0,0,0.35)";
+          }}
+          onBlur={(e) => {
+            const el = e.currentTarget;
+            el.style.transform = "scale(1)";
+            el.style.boxShadow = "0 1px 4px rgba(0,0,0,0.3)";
+          }}
           aria-label={label}
         />
       </Slider.Root>
