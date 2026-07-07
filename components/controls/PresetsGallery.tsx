@@ -16,35 +16,25 @@ export function PresetsGallery({ onLoad }: Props) {
       : PRESETS.filter((p) => p.category === activeCategory);
 
   return (
-    <div className="flex flex-col gap-5">
-      {/* Category pills */}
-      <div className="flex items-center gap-2 flex-wrap">
+    <div className="flex flex-col" style={{ gap: 28 }}>
+      {/* Category filters — editorial text */}
+      <div className="flex items-center flex-wrap" style={{ gap: 12 }}>
         {categories.map((cat) => {
           const isActive = activeCategory === cat;
           return (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className="px-4 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-95"
+              className="sg-transition"
               style={{
-                background: isActive
-                  ? "var(--accent)"
-                  : "rgba(255,255,255,0.06)",
-                color: isActive ? "#0b1414" : "var(--text-muted)",
-                border: isActive
-                  ? "1px solid var(--accent)"
-                  : "1px solid rgba(255,255,255,0.07)",
-                boxShadow: isActive
-                  ? "0 0 16px color-mix(in srgb, var(--accent) 25%, transparent)"
-                  : "none",
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive)
-                  e.currentTarget.style.background = "rgba(255,255,255,0.1)";
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive)
-                  e.currentTarget.style.background = "rgba(255,255,255,0.06)";
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                fontSize: 11,
+                fontWeight: isActive ? 500 : 400,
+                color: isActive ? "var(--text)" : "var(--text-muted)",
+                letterSpacing: "0.02em",
               }}
             >
               {cat}
@@ -53,47 +43,65 @@ export function PresetsGallery({ onLoad }: Props) {
         })}
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+      {/* Preset grid */}
+      <div
+        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
+        style={{ gap: 12 }}
+      >
         {filtered.map((preset, i) => {
           const shadowValue = shadowsToCssValue(preset.shadows);
           return (
             <button
               key={preset.name}
               onClick={() => onLoad(preset.shadows)}
-              className="group flex flex-col items-center gap-3 p-4 rounded-2xl text-left transition-all active:scale-[0.97] animate-fade-up"
+              className="sg-transition"
               style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 12,
+                padding: "16px 12px",
+                borderRadius: 8,
                 background: "var(--surface)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                animationDelay: `${i * 0.03}s`,
+                border: "1px solid var(--border)",
+                cursor: "pointer",
+                textAlign: "left",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor =
-                  "color-mix(in srgb, var(--accent) 30%, transparent)";
-                e.currentTarget.style.background = "var(--surface-raised)";
+                e.currentTarget.style.background = "var(--surface-hover)";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
                 e.currentTarget.style.background = "var(--surface)";
               }}
             >
               {/* Mini preview */}
               <div
-                className="w-full h-16 rounded-xl flex items-center justify-center"
-                style={{ background: "#F4F4F2" }}
+                className="w-full flex items-center justify-center"
+                style={{
+                  height: 56,
+                  borderRadius: 6,
+                  background: "#F4F4F2",
+                }}
               >
                 <div
-                  className="w-8 h-8 rounded-xl bg-white"
                   style={{
+                    width: 28,
+                    height: 28,
+                    borderRadius: 6,
+                    background: "white",
                     boxShadow: shadowValue,
-                    transition: "box-shadow 0.3s ease",
+                    transition: "box-shadow 0.2s ease",
                   }}
                 />
               </div>
               {/* Name */}
               <span
-                className="text-xs font-semibold text-center leading-tight w-full transition-colors duration-200"
-                style={{ color: "var(--text-muted)" }}
+                className="sg-meta"
+                style={{
+                  fontSize: 10.5,
+                  textAlign: "center",
+                  lineHeight: 1.3,
+                }}
               >
                 {preset.name}
               </span>
