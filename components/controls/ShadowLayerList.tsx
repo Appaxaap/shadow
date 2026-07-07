@@ -75,7 +75,7 @@ export function ShadowLayerList({
         </span>
         <button
           onClick={onAdd}
-          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-150 active:scale-95"
+          className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-xl transition-all duration-150 active:scale-95"
           style={{
             color: "var(--accent)",
             background: "rgba(94,158,136,0.1)",
@@ -164,7 +164,7 @@ export function ShadowLayerList({
                     e.stopPropagation();
                     onToggleVisibility(shadow.id);
                   }}
-                  className="p-1.5 rounded-lg transition-all active:scale-90"
+                  className="p-1.5 rounded-xl transition-all active:scale-90"
                   style={{ color: "var(--text-muted)" }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = "rgba(255,255,255,0.08)";
@@ -184,7 +184,7 @@ export function ShadowLayerList({
                     e.stopPropagation();
                     onDuplicate(shadow.id);
                   }}
-                  className="p-1.5 rounded-lg transition-all active:scale-90"
+                  className="p-1.5 rounded-xl transition-all active:scale-90"
                   style={{ color: "var(--text-muted)" }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.background = "rgba(255,255,255,0.08)";
@@ -205,7 +205,7 @@ export function ShadowLayerList({
                       e.stopPropagation();
                       onRemove(shadow.id);
                     }}
-                    className="p-1.5 rounded-lg transition-all active:scale-90"
+                    className="p-1.5 rounded-xl transition-all active:scale-90"
                     style={{ color: "var(--text-muted)" }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.background = "rgba(201,96,96,0.12)";

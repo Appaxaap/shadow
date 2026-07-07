@@ -77,7 +77,7 @@ export function ShadowPreview({ shadows, isLight }: Props) {
               <button
                 key={s.value}
                 onClick={() => setShape(s.value)}
-                className="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 active:scale-95"
+                className="px-3 py-1.5 text-xs font-semibold rounded-xl transition-all"
                 style={{
                   background: active ? "var(--surface-raised)" : "transparent",
                   color: active ? "var(--text)" : "var(--text-muted)",

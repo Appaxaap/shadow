@@ -72,7 +72,7 @@ export function CodeOutput({ shadows, getShareUrl, panelMode = false }: Props) {
         }}
       >
         <div
-          className="flex items-center overflow-x-auto rounded-lg"
+          className="flex items-center overflow-x-auto rounded-xl"
           style={{ scrollbarWidth: "none" }}
         >
           {TABS.map((t) => (
@@ -99,7 +99,7 @@ export function CodeOutput({ shadows, getShareUrl, panelMode = false }: Props) {
         <div className="flex items-center gap-1.5 shrink-0">
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 active:scale-95"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-xl transition-all duration-150 active:scale-95"
             style={{
               background: codeCopied
                 ? "rgba(94,158,136,0.15)"
@@ -117,7 +117,7 @@ export function CodeOutput({ shadows, getShareUrl, panelMode = false }: Props) {
           </button>
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 active:scale-95"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-xl transition-all duration-150 active:scale-95"
             style={{
               background: shareCopied
                 ? "rgba(94,158,136,0.15)"

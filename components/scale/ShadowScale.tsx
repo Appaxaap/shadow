@@ -167,7 +167,7 @@ export function ShadowScale({ isLight }: { isLight: boolean }) {
                 type="color"
                 value={color}
                 onChange={(e) => handleChange(e.target.value, intensity, style)}
-                className="w-9 h-9 rounded-lg cursor-pointer outline-none"
+                className="w-9 h-9 rounded-xl cursor-pointer outline-none"
                 style={{
                   border: "2px solid var(--border-hover)",
                   background: "none",
@@ -239,7 +239,7 @@ export function ShadowScale({ isLight }: { isLight: boolean }) {
                 <button
                   key={s.id}
                   onClick={() => handleChange(color, intensity, s.id)}
-                  className="px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150"
+                  className="px-2.5 py-1.5 text-xs font-semibold rounded-xl transition-all duration-150"
                   style={{
                     background:
                       style === s.id ? "var(--surface-raised)" : "transparent",
@@ -287,7 +287,7 @@ export function ShadowScale({ isLight }: { isLight: boolean }) {
                 }}
               >
                 <div
-                  className="w-9 h-9 rounded-lg bg-white"
+                  className="w-9 h-9 rounded-xl bg-white"
                   style={{ boxShadow: entry.value }}
                 />
               </div>
@@ -341,7 +341,7 @@ export function ShadowScale({ isLight }: { isLight: boolean }) {
           <div className="px-2 py-1.5 shrink-0">
             <button
               onClick={handleCopy}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg transition-all duration-150 active:scale-95"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-xl transition-all duration-150 active:scale-95"
               style={{
                 background: copied
                   ? "rgba(94,158,136,0.15)"

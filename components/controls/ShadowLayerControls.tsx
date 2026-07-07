@@ -151,7 +151,7 @@ function ColorPickerDialog({
             type="text"
             value={hexInput}
             onChange={(e) => onHexInput(e.target.value)}
-            className="flex-1 min-w-0 text-xs font-mono rounded-lg px-2.5 py-2 outline-none"
+            className="flex-1 min-w-0 text-xs font-mono rounded-xl px-2.5 py-2 outline-none"
             style={{
               background: "var(--surface-raised)",
               border: "1px solid var(--border)",
@@ -168,7 +168,7 @@ function ColorPickerDialog({
           />
           <button
             onClick={onClose}
-            className="shrink-0 text-xs font-semibold px-3 py-2 rounded-lg transition-all duration-150 active:scale-95"
+            className="shrink-0 text-xs font-semibold px-3 py-2 rounded-xl transition-all duration-150 active:scale-95"
             style={{ background: "var(--accent)", color: "var(--bg)" }}
           >
             Done

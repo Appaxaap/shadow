@@ -60,7 +60,7 @@ export default function Home() {
       >
         <div className="flex items-center gap-2.5 flex-1">
           <div
-            className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0"
+            className="w-6 h-6 rounded-xl flex items-center justify-center shrink-0"
             style={{ background: "var(--accent)" }}
           >
             <Layers
@@ -90,7 +90,7 @@ export default function Home() {
               <button
                 key={t}
                 onClick={() => setTab(t)}
-                className="px-3 py-1.5 text-xs font-semibold rounded-lg capitalize transition-all duration-150 active:scale-95"
+                className="px-3 py-1.5 text-xs font-semibold rounded-xl capitalize transition-all duration-150 active:scale-95"
                 style={{
                   background:
                     tab === t ? "var(--surface-raised)" : "transparent",
@@ -109,7 +109,7 @@ export default function Home() {
           {/* Theme toggle */}
           <button
             onClick={toggleTheme}
-            className="w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-150 active:scale-90 hover:bg-white/5 hover:text-[var(--text)]"
+            className="w-8 h-8 flex items-center justify-center rounded-xl transition-all duration-150 active:scale-90 hover:bg-white/5 hover:text-[var(--text)]"
             style={{
               background: "rgba(128,128,128,0.08)",
               border: "1px solid var(--border)",
