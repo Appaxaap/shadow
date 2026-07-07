@@ -5,12 +5,20 @@ import type { PreviewShape, Shadow } from "../../lib/types";
 import { shadowsToCssValue } from "../../lib/shadowUtils";
 import type { LightState } from "../../lib/lightSource";
 import { LightSourceOverlay } from "./LightSourceOverlay";
+import type { Material, MaterialId } from "../../lib/materials";
+import {
+  MATERIALS,
+  getMaterial,
+  applyMaterialToColor,
+} from "../../lib/materials";
 
 type Props = {
   shadows: Shadow[];
   isLight: boolean;
   lightState?: LightState;
   onLightChange?: (lx: number, ly: number) => void;
+  materialId?: MaterialId;
+  onMaterialChange?: (id: MaterialId) => void;
 };
 
 const SHAPES: { label: string; value: PreviewShape }[] = [
@@ -25,10 +33,29 @@ export function ShadowPreview({
   isLight,
   lightState,
   onLightChange,
+  materialId = "paper",
+  onMaterialChange,
 }: Props) {
   const [shape, setShape] = useState<PreviewShape>("box");
 
-  const shadowValue = shadowsToCssValue(shadows);
+  const material = getMaterial(materialId);
+
+  // Apply material modifiers to shadow colors
+  const materialShadows = shadows.map((s) => {
+    if (s.visible === false) return s;
+    const r = parseInt(s.color.slice(1, 3), 16);
+    const g = parseInt(s.color.slice(3, 5), 16);
+    const b = parseInt(s.color.slice(5, 7), 16);
+    const rgba = `rgba(${r},${g},${b},${s.opacity})`;
+    const adjusted = applyMaterialToColor(rgba, material);
+    // Parse adjusted rgba back to individual values
+    const match = adjusted.match(/rgba\((\d+),(\d+),(\d+),([\d.]+)\)/);
+    if (!match) return s;
+    const [_, ar, ag, ab, ao] = match.map(Number);
+    const newHex = `#${ar.toString(16).padStart(2, "0")}${ag.toString(16).padStart(2, "0")}${ab.toString(16).padStart(2, "0")}`;
+    return { ...s, color: newHex, opacity: ao };
+  });
+  const shadowValue = shadowsToCssValue(materialShadows);
   const primaryVisible = shadows.find((s) => s.visible !== false);
 
   // Canvas and element colors follow the global theme
@@ -70,8 +97,47 @@ export function ShadowPreview({
         ...dotGrid,
       }}
     >
-      {/* Floating shape selector - top-left overlay */}
-      <div className="absolute top-3 left-3 z-10">
+      {/* Floating material + shape selector - top-left overlay */}
+      <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5">
+        {/* Material selector */}
+        {onMaterialChange && (
+          <div
+            className="flex items-center gap-0.5 p-0.5 rounded-xl"
+            style={{
+              background: isLight
+                ? "rgba(255,255,255,0.75)"
+                : "rgba(11,20,20,0.75)",
+              border: "1px solid var(--border)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+            }}
+          >
+            {MATERIALS.map((m) => {
+              const active = m.id === materialId;
+              return (
+                <button
+                  key={m.id}
+                  onClick={() => onMaterialChange(m.id)}
+                  className="px-2 py-1.5 text-[11px] font-semibold rounded-xl transition-all"
+                  style={{
+                    background: active
+                      ? "var(--surface-raised)"
+                      : "transparent",
+                    color: active ? "var(--text)" : "var(--text-muted)",
+                    border: active
+                      ? "1px solid var(--border-hover)"
+                      : "1px solid transparent",
+                  }}
+                  title={m.description}
+                >
+                  {m.icon} {m.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
+
+        {/* Shape selector */}
         <div
           className="flex items-center gap-0.5 p-0.5 rounded-xl"
           style={{
@@ -124,9 +190,20 @@ export function ShadowPreview({
             <div
               className="w-32 h-32 rounded-2xl"
               style={{
-                background: elementBg,
+                background: material.elementBg,
                 boxShadow: shadowValue,
                 transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
+                ...(material.elementExtra
+                  ? Object.fromEntries(
+                      material.elementExtra
+                        .split(";")
+                        .filter(Boolean)
+                        .map((s) => {
+                          const [k, ...v] = s.split(":");
+                          return [k.trim(), v.join(":").trim()];
+                        }),
+                    )
+                  : {}),
               }}
             />
           )}
@@ -135,9 +212,20 @@ export function ShadowPreview({
             <div
               className="w-32 h-32 rounded-full"
               style={{
-                background: elementBg,
+                background: material.elementBg,
                 boxShadow: shadowValue,
                 transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
+                ...(material.elementExtra
+                  ? Object.fromEntries(
+                      material.elementExtra
+                        .split(";")
+                        .filter(Boolean)
+                        .map((s) => {
+                          const [k, ...v] = s.split(":");
+                          return [k.trim(), v.join(":").trim()];
+                        }),
+                    )
+                  : {}),
               }}
             />
           )}
@@ -146,10 +234,21 @@ export function ShadowPreview({
             <div
               className="px-8 py-3.5 rounded-full font-semibold text-sm select-none"
               style={{
-                background: elementBg,
+                background: material.elementBg,
                 color: textColor,
                 boxShadow: shadowValue,
                 transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
+                ...(material.elementExtra
+                  ? Object.fromEntries(
+                      material.elementExtra
+                        .split(";")
+                        .filter(Boolean)
+                        .map((s) => {
+                          const [k, ...v] = s.split(":");
+                          return [k.trim(), v.join(":").trim()];
+                        }),
+                    )
+                  : {}),
               }}
             >
               Click me
@@ -160,9 +259,20 @@ export function ShadowPreview({
             <div
               className="w-60 rounded-2xl p-5 flex flex-col gap-3"
               style={{
-                background: elementBg,
+                background: material.elementBg,
                 boxShadow: shadowValue,
                 transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
+                ...(material.elementExtra
+                  ? Object.fromEntries(
+                      material.elementExtra
+                        .split(";")
+                        .filter(Boolean)
+                        .map((s) => {
+                          const [k, ...v] = s.split(":");
+                          return [k.trim(), v.join(":").trim()];
+                        }),
+                    )
+                  : {}),
               }}
             >
               <div

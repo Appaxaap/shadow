@@ -12,6 +12,7 @@ import { ShadowPalette } from "../components/controls/ShadowPalette";
 import { ShadowPreview } from "../components/preview/ShadowPreview";
 import { useShadowState } from "../hooks/useShadowState";
 import { ShadowScale } from "../components/scale/ShadowScale";
+import { DEFAULT_MATERIAL, type MaterialId } from "../lib/materials";
 
 export default function Home() {
   const {
@@ -31,6 +32,8 @@ export default function Home() {
     loadPreset,
     getShareUrl,
   } = useShadowState();
+
+  const [materialId, setMaterialId] = useState<MaterialId>(DEFAULT_MATERIAL);
 
   // Read initial state from DOM (already set by inline script in layout.tsx)
   const [isLight, setIsLight] = useState(false);
@@ -264,6 +267,8 @@ export default function Home() {
                 isLight={isLight}
                 lightState={lightState}
                 onLightChange={setLightPosition}
+                materialId={materialId}
+                onMaterialChange={setMaterialId}
               />
             </div>
 
