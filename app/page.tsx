@@ -280,15 +280,11 @@ export default function Home() {
 
             {/* Right code generator */}
             <div
-              className="w-full lg:w-[430px] xl:w-[470px] shrink-0 min-h-[260px] lg:min-h-0 animate-fade-up stagger-3 border-t lg:border-t-0 lg:border-l"
+              className="w-full lg:w-[430px] xl:w-[470px] shrink-0 min-h-[260px] lg:min-h-0 animate-fade-up stagger-3 border-t lg:border-t-0 lg:border-l overflow-hidden"
               style={{ borderColor: "var(--border)" }}
             >
               <div className="h-full">
-                <CodeOutput
-                  shadows={displayShadows}
-                  getShareUrl={getShareUrl}
-                  panelMode
-                />
+                <CodeOutput shadows={displayShadows} />
               </div>
             </div>
           </div>
