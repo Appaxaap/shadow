@@ -16,6 +16,7 @@ import { PresetsGallery } from "../components/controls/PresetsGallery";
 import { ShadowLayerControls } from "../components/controls/ShadowLayerControls";
 import { ShadowLayerList } from "../components/controls/ShadowLayerList";
 import { DepthMeter } from "../components/controls/DepthMeter";
+import { GradientShadow } from "../components/controls/GradientShadow";
 import { ShadowDNA } from "../components/code/ShadowDNA";
 import { ShadowPalette } from "../components/controls/ShadowPalette";
 import { ShadowMorph } from "../components/controls/ShadowMorph";
@@ -366,6 +367,7 @@ export default function Home() {
                   <NaturalLanguageInput onApply={loadPreset} />
                   <ShadowMorph shadows={shadows} onApply={loadPreset} />
                   <DepthMeter onApply={loadPreset} />
+                  <GradientShadow onApply={loadPreset} />
                   <ShadowDNA shadows={shadows} onLoadDNA={loadPreset} />
                   {activeShadow && (
                     <ShadowPalette
