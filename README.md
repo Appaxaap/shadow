@@ -61,6 +61,71 @@ User Interaction
 
 ---
 
+## Design System
+
+Layerbox uses a custom design system built with CSS custom properties, Tailwind CSS v4 utility classes, and a consistent set of animation primitives.
+
+### Theme Tokens
+
+The application defines a comprehensive set of CSS custom properties for theming. Two themes are provided: dark (default) and light. All UI components reference these tokens directly.
+
+| Token | Dark Value | Light Value | Usage |
+|-------|-----------|-------------|-------|
+| `--bg` | `#0b1414` | `#eef2f2` | Page background |
+| `--surface` | `#111c1c` | `#ffffff` | Card, panel, elevated surface |
+| `--surface-raised` | `#172020` | `#f0f5f5` | Hovered/active surface |
+| `--surface-code` | `#0b1313` | `#f5f7f7` | Code block background |
+| `--border` | `rgba(255,255,255,0.07)` | `rgba(0,0,0,0.08)` | Default border |
+| `--border-hover` | `rgba(255,255,255,0.13)` | `rgba(0,0,0,0.14)` | Hover/focus border |
+| `--text` | `#bdc1bb` | `#0f2020` | Primary text |
+| `--text-muted` | `#6e8a85` | `#4a6868` | Secondary/meta text |
+| `--text-faint` | `#364d4d` | `#7a9898` | Placeholder, disabled text |
+| `--accent` | `#5e9e88` | `#3d8a72` | Primary action, links, active state |
+| `--accent-hover` | `#4e8e78` | `#2e7a62` | Accent hover state |
+| `--destructive` | `#c96060` | `#b04040` | Delete, error states |
+| `--header-bg` | `rgba(11,20,20,0.88)` | `rgba(238,242,242,0.88)` | Header background with blur |
+
+### Typography
+
+| Token | Font | Usage |
+|-------|------|-------|
+| `--font-sans` | Satoshi, system-ui, sans-serif | UI text, headings, labels |
+| `--font-serif` | Instrument Serif, Georgia, serif | Headings, accent text (via `font-instrument-serif` variable) |
+| `--font-mono` | JetBrains Mono, Fira Code, monospace | Code output, technical values |
+
+### Code Syntax Highlighting Tokens
+
+| Token | Dark Value | Light Value | Token Type |
+|-------|-----------|-------------|------------|
+| `--code-k` | `#c586c0` | `#7b30a0` | Keywords |
+| `--code-s` | `#ce9178` | `#a0522d` | Strings |
+| `--code-n` | `#b5cea8` | `#2e7d5e` | Numbers, hex colors |
+| `--code-p` | `#9cdcfe` | `#1a6fc4` | Properties |
+| `--code-f` | `#dcdcaa` | `#b8860b` | Functions |
+| `--code-c` | `#6a9955` | `#5a8a5a` | Comments |
+| `--code-o` | `#6e7681` | `#999999` | Operators, punctuation |
+| `--code-d` | `#d7ba7d` | `#8b6914` | CSS directives/pseudo |
+| `--code-t` | `#4ec9b0` | `#1a8a7a` | Types, classes |
+
+### Animation System
+
+| Class | Animation | Timing | Use Case |
+|-------|-----------|--------|----------|
+| `.animate-fade-up` | fade-up | 0.35s cubic-bezier(0.16, 1, 0.3, 1) | Panel/mount entrances |
+| `.animate-fade-in` | fade-in | 0.25s ease | Simple opacity reveals |
+| `.animate-scale-in` | scale-in | 0.2s cubic-bezier(0.16, 1, 0.3, 1) | Modal, popover, tooltip |
+| `.animate-check-pop` | check-pop | 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) | Success indicators |
+| `.animate-slide-in` | slide-in | 0.2s cubic-bezier(0.16, 1, 0.3, 1) | List item entrances |
+
+Stagger classes (`.stagger-1` through `.stagger-4`) add incremental delays for sequenced animations.
+
+### Component Patterns
+
+- **Floating panels**: Used for desktop side panels and code output. Fixed dimensions with `pointer-events: auto` for interaction, wrapped in parents with `pointer-events: none`.
+- **Bottom sheets**: Mobile panels use a slide-up sheet at `max-height: 55vh` with a drag handle and close button.
+- **Canvas overlays**: Toolbars are centered horizontally above the preview canvas, with horizontal scroll on mobile.
+- **Code blocks**: Syntax-highlighted output uses a monospace font with custom syntax tokens, rendered as HTML with inline CSS variables.
+
 ## Core Types
 
 ### `Shadow`
@@ -278,14 +343,27 @@ Categories: Subtle, Elevated, Material, Apple, Soft UI, Glassmorphism, Neumorphi
 ### Component Tree
 
 ```
+Routes:
+  /  -> LandingPage (app/page.tsx)          - Marketing page with SEO content
+  /editor -> EditorPage (app/editor/page.tsx) - Shadow generator tool
+
 RootLayout (layout.tsx)
-  +-- themeScript (inline <script> prevents flash)
-  +-- Home (page.tsx)
+  +-- themeScript (inline script prevents flash)
+  +-- JSON-LD structured data (SoftwareApplication schema)
+  +-- LandingPage (page.tsx) [at /]
+  |   +-- Hero section with CTA
+  |   +-- Features grid (6 feature cards)
+  |   +-- How it works section (3 steps)
+  |   +-- Export formats showcase
+  |   +-- FAQ section (6 accordion items)
+  |   +-- Footer
+  |
+  +-- EditorPage (editor/page.tsx) [at /editor]
        +-- useShadowState (hook)
        |
        +-- Header
        |   +-- Logo / Title
-       |   +-- Tab Switcher (Controls / Scale)
+       |   +-- Tab Switcher (Editor / Scale / Presets)
        |   +-- Undo / Redo buttons
        |   +-- Light Source toggle
        |   +-- Panel Toggle
@@ -375,7 +453,12 @@ The `getFormatCode()` dispatch function selects the appropriate generator based 
 
 ## Mobile Responsiveness
 
-Layerbox uses a responsive layout with a breakpoint at 1024px. Mobile detection is handled by the `useMobile()` hook in `app/page.tsx` which checks `window.innerWidth`.
+Layerbox has two main routes:
+
+- `/` - Marketing landing page with SEO-optimized content (hero, features, how it works, FAQ)
+- `/editor` - The shadow generator tool with canvas, controls, and code output
+
+Mobile detection is handled by the `useMobile()` hook in `app/editor/page.tsx` which checks `window.innerWidth < 1024`.
 
 ### Desktop (1024px and above)
 
@@ -486,8 +569,10 @@ Always run `npm run build` before committing to catch TypeScript errors and Turb
 ```
 app/
   globals.css                    - Global styles, CSS custom properties, theme variables, animations
-  layout.tsx                     - Root layout: metadata, font loading, inline theme script
-  page.tsx                       - Main page: composes all components, manages local UI state
+  layout.tsx                     - Root layout: metadata, JSON-LD, font loading, inline theme script
+  page.tsx                       - Marketing landing page at / (SEO content, hero, features, FAQ)
+  editor/
+    page.tsx                     - Shadow editor tool at /editor (all components, canvas, controls)
 components/
   code/
     CodeOutput.tsx               - Code export panel: format switching, syntax highlighting, clipboard copy

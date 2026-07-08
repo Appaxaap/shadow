@@ -1,673 +1,307 @@
-"use client";
+import Link from "next/link";
 
-import {
-  ArrowLeft,
-  Layers,
-  Lightbulb,
-  Moon,
-  Sun,
-  PanelLeftClose,
-  PanelLeft,
-  Undo2,
-  Redo2,
-  Sliders,
-  Code2,
-  Wrench,
-  X,
-} from "lucide-react";
-import React, { useEffect, useState, useCallback } from "react";
-import { CodeOutput } from "../components/code/CodeOutput";
-import { PresetsGallery } from "../components/controls/PresetsGallery";
-import { ShadowLayerControls } from "../components/controls/ShadowLayerControls";
-import { ShadowLayerList } from "../components/controls/ShadowLayerList";
-import { DepthMeter } from "../components/controls/DepthMeter";
-import { GradientShadow } from "../components/controls/GradientShadow";
-import { ShadowDNA } from "../components/code/ShadowDNA";
-import { FocusRingGenerator } from "../components/controls/FocusRingGenerator";
-import { ShadowPalette } from "../components/controls/ShadowPalette";
-import { ShadowMorph } from "../components/controls/ShadowMorph";
-import { NaturalLanguageInput } from "../components/controls/NaturalLanguageInput";
-import { ShadowPreview } from "../components/preview/ShadowPreview";
-import { useShadowState } from "../hooks/useShadowState";
-import { ShadowScale } from "../components/scale/ShadowScale";
-import { ShadowInspector } from "../components/controls/ShadowInspector";
-import { DEFAULT_MATERIAL, type MaterialId } from "../lib/materials";
-
-type MobileTab = "layers" | "controls" | "tools" | "code" | null;
-
-function useMobile() {
-  const [mobile, setMobile] = useState(true);
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    function check() {
-      setMobile(window.innerWidth < 1024);
-    }
-    check();
-    setReady(true);
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-  return { mobile, ready };
-}
-
-export default function Home() {
-  const {
-    shadows,
-    activeId,
-    setActiveId,
-    addLayer,
-    removeLayer,
-    updateLayer,
-    duplicateLayer,
-    toggleLayerVisibility,
-    reorderLayers,
-    lightState,
-    toggleLight,
-    setLightPosition,
-    computeShadow,
-    loadPreset,
-    undo,
-    redo,
-    canUndo,
-    canRedo,
-  } = useShadowState();
-
-  const [materialId, setMaterialId] = useState<MaterialId>(DEFAULT_MATERIAL);
-  const [isLight, setIsLight] = useState(false);
-  const [tab, setTab] = useState<"editor" | "presets" | "scale">("editor");
-  const [showPanels, setShowPanels] = useState(true);
-  const [bgId, setBgId] = useState("light");
-  const [mobileTab, setMobileTab] = useState<MobileTab>(null);
-  const { mobile: isMobile, ready } = useMobile();
-
-  const bgMap: Record<string, string> = {
-    light: "#F0F3F2",
-    white: "#ffffff",
-    dark: "#0e1a1a",
-    black: "#000000",
-    "warm-gray": "#F5F0EB",
-    "cool-gray": "#E8EDF2",
-    "gradient-sunset": "linear-gradient(135deg, #f093fb, #f5576c)",
-    "gradient-ocean": "linear-gradient(135deg, #4facfe, #00f2fe)",
-    "gradient-forest": "linear-gradient(135deg, #11998e, #38ef7d)",
-  };
-  const previewBg = bgMap[bgId] || bgMap.light;
-
-  useEffect(() => {
-    function onKeyDown(e: KeyboardEvent) {
-      const isCtrl = e.ctrlKey || e.metaKey;
-      if (isCtrl && e.key === "z" && !e.shiftKey) {
-        e.preventDefault();
-        undo();
-      }
-      if (isCtrl && e.key === "z" && e.shiftKey) {
-        e.preventDefault();
-        redo();
-      }
-      if (isCtrl && e.key === "y") {
-        e.preventDefault();
-        redo();
-      }
-    }
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [undo, redo]);
-
-  useEffect(() => {
-    const light = document.documentElement.classList.contains("light");
-    setIsLight(light);
-    setBgId(light ? "light" : "dark");
-  }, []);
-
-  function toggleTheme() {
-    const next = !isLight;
-    setIsLight(next);
-    document.documentElement.classList.toggle("light", next);
-    setBgId(next ? "light" : "dark");
-    try {
-      localStorage.setItem("sg-theme", next ? "light" : "dark");
-    } catch {
-      /* ok */
-    }
-  }
-
-  const displayShadows = React.useMemo(
-    () => shadows.map(computeShadow),
-    [shadows, computeShadow],
-  );
-  const activeShadow = displayShadows.find((s) => s.id === activeId);
-
-  const closeMobileTab = useCallback(() => setMobileTab(null), []);
-
+export default function LandingPage() {
   return (
-    <div
-      className="flex flex-col overflow-hidden sg-page"
-      style={{ height: "100dvh" }}
-    >
-      {/* ─── HEADER ─── */}
-      <header
-        className="shrink-0 flex items-center px-3 sm:px-5 animate-fade-in"
-        style={{
-          borderBottom: "1px solid var(--border)",
-          background: "var(--header-bg)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          height: isMobile ? 48 : 52,
-        }}
-      >
-        <div className="flex items-center gap-2 flex-1 min-w-0">
-          {/* Back button - mobile only, when on presets/scale */}
-          {isMobile && tab !== "editor" && (
-            <button
-              onClick={() => setTab("editor")}
-              className="w-7 h-7 flex items-center justify-center rounded-xl shrink-0 transition-all duration-150 active:scale-90"
-              style={{
-                background: "rgba(128,128,128,0.08)",
-                border: "1px solid var(--border)",
-                color: "var(--text-muted)",
-              }}
-              aria-label="Back to editor"
-            >
-              <ArrowLeft size={14} />
-            </button>
-          )}
-          <div
-            className="w-6 h-6 rounded-xl flex items-center justify-center shrink-0"
-            style={{ background: "var(--accent)" }}
-          >
-            <Layers
-              size={13}
-              style={{ color: "var(--bg)" }}
-              strokeWidth={2.5}
-            />
-          </div>
-          <span
-            className="font-semibold text-sm truncate"
-            style={{ color: "var(--text)" }}
-          >
-            Layerbox
-          </span>
-        </div>
-
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Tab switcher - hidden on mobile */}
-          {!isMobile && (
-            <div
-              className="flex items-center gap-0.5 p-0.5 rounded-xl"
-              style={{
-                background: "rgba(128,128,128,0.08)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              {(["editor", "presets", "scale"] as const).map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setTab(t)}
-                  className="px-3 py-1.5 text-xs font-semibold rounded-xl capitalize transition-all duration-150 active:scale-95"
-                  style={{
-                    background:
-                      tab === t ? "var(--surface-raised)" : "transparent",
-                    color: tab === t ? "var(--text)" : "var(--text-muted)",
-                    border:
-                      tab === t
-                        ? "1px solid var(--border-hover)"
-                        : "1px solid transparent",
-                  }}
-                >
-                  {t}
-                </button>
-              ))}
-            </div>
-          )}
-
-          {/* Undo / Redo */}
-          <div className="flex items-center gap-0.5">
-            <button
-              onClick={undo}
-              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-xl transition-all duration-150 active:scale-90"
-              style={{
-                background: "rgba(128,128,128,0.08)",
-                border: "1px solid var(--border)",
-                color: canUndo ? "var(--text-muted)" : "var(--text-faint)",
-                opacity: canUndo ? 1 : 0.4,
-                cursor: canUndo ? "pointer" : "default",
-              }}
-              aria-label="Undo"
-              title="Undo (Ctrl+Z)"
-            >
-              <Undo2 size={isMobile ? 11 : 13} />
-            </button>
-            <button
-              onClick={redo}
-              className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-xl transition-all duration-150 active:scale-90"
-              style={{
-                background: "rgba(128,128,128,0.08)",
-                border: "1px solid var(--border)",
-                color: canRedo ? "var(--text-muted)" : "var(--text-faint)",
-                opacity: canRedo ? 1 : 0.4,
-                cursor: canRedo ? "pointer" : "default",
-              }}
-              aria-label="Redo"
-              title="Redo (Ctrl+Shift+Z)"
-            >
-              <Redo2 size={isMobile ? 11 : 13} />
-            </button>
-          </div>
-
-          {/* Light source toggle */}
-          <button
-            onClick={toggleLight}
-            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-xl transition-all duration-150 active:scale-90"
+    <main className="min-h-screen bg-[var(--bg)] text-[var(--text)] font-sans">
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 50% at 50% 0%, rgba(94,158,136,0.08), transparent)",
+          }}
+        />
+        <header className="flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
+          <span className="text-lg font-bold tracking-tight">Layerbox</span>
+          <Link
+            href="/editor"
+            className="px-5 py-2 rounded-xl text-sm font-semibold transition-all duration-150 active:scale-95"
             style={{
-              background: lightState.active
-                ? "color-mix(in srgb, #ffdd44 15%, transparent)"
-                : "rgba(128,128,128,0.08)",
-              border: `1px solid ${lightState.active ? "rgba(255,220,80,0.3)" : "var(--border)"}`,
-              color: lightState.active ? "#ffdd44" : "var(--text-muted)",
+              background: "var(--accent)",
+              color: "#fff",
             }}
-            aria-label="Toggle light source"
-            title="Drag a light source to control shadow direction"
           >
-            <Lightbulb size={isMobile ? 12 : 14} />
-          </button>
+            Open Editor
+          </Link>
+        </header>
 
-          {/* Toggle panels - desktop only */}
-          {!isMobile && (
-            <button
-              onClick={() => setShowPanels((v) => !v)}
-              className="w-8 h-8 flex items-center justify-center rounded-xl transition-all duration-150 active:scale-90"
+        <div className="max-w-4xl mx-auto px-6 pt-20 pb-24 text-center">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-5">
+            CSS Box Shadow Generator
+          </h1>
+          <p
+            className="text-lg sm:text-xl max-w-2xl mx-auto mb-8"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Create, visualize, and export multi-layer box shadows in seconds.
+            Supports CSS, Tailwind, SCSS, JavaScript, and Flutter formats.
+          </p>
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <Link
+              href="/editor"
+              className="px-8 py-3 rounded-xl text-base font-semibold transition-all duration-150 active:scale-95"
               style={{
-                background: showPanels
-                  ? "rgba(128,128,128,0.08)"
-                  : "color-mix(in srgb, var(--accent) 12%, transparent)",
-                border: `1px solid ${showPanels ? "var(--border)" : "color-mix(in srgb, var(--accent) 25%, transparent)"}`,
-                color: showPanels ? "var(--text-muted)" : "var(--accent)",
+                background: "var(--accent)",
+                color: "#fff",
               }}
-              aria-label={showPanels ? "Hide all panels" : "Show all panels"}
-              title="Toggle all panels"
             >
-              {showPanels ? (
-                <PanelLeftClose size={14} />
-              ) : (
-                <PanelLeft size={14} />
-              )}
-            </button>
-          )}
-
-          {/* Theme toggle */}
-          <button
-            onClick={toggleTheme}
-            className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-xl transition-all duration-150 active:scale-90"
-            style={{
-              background: "rgba(128,128,128,0.08)",
-              border: "1px solid var(--border)",
-              color: "var(--text-muted)",
-            }}
-            aria-label="Toggle theme"
-          >
-            {isLight ? (
-              <Moon size={isMobile ? 12 : 14} />
-            ) : (
-              <Sun size={isMobile ? 12 : 14} />
-            )}
-          </button>
+              Start Designing
+            </Link>
+            <Link
+              href="#features"
+              className="px-8 py-3 rounded-xl text-base font-semibold transition-all duration-150 active:scale-95"
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid var(--border)",
+                color: "var(--text)",
+              }}
+            >
+              Learn More
+            </Link>
+          </div>
         </div>
-      </header>
+      </section>
 
-      {/* ─── MAIN CONTENT ─── */}
-      <div className="flex-1 min-h-0 overflow-hidden">
-        {tab === "editor" && (
-          <div className="h-full min-h-0 relative">
-            {/* Full-bleed preview canvas */}
-            <div className="absolute inset-0">
-              <ShadowPreview
-                shadows={displayShadows}
-                isLight={isLight}
-                lightState={lightState}
-                onLightChange={setLightPosition}
-                materialId={materialId}
-                onMaterialChange={setMaterialId}
-                panUnbounded={!showPanels}
-                previewBg={previewBg}
-                bgId={bgId}
-                onBgChange={setBgId}
-              />
-            </div>
-
-            {/* ─── DESKTOP LAYOUT ─── */}
-            {!isMobile && (
-              <>
-                {/* Left panel: Layers + Controls */}
-                {showPanels && (
-                  <div className="absolute left-3 top-3 bottom-3 w-[270px] flex flex-col gap-2 z-10 pointer-events-none">
-                    <div
-                      className="shrink-0 pointer-events-auto animate-fade-up rounded-2xl p-3"
-                      style={{
-                        background: "var(--surface)",
-                        border: "1px solid var(--border)",
-                        filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
-                      }}
-                    >
-                      <ShadowLayerList
-                        shadows={shadows}
-                        activeId={activeId}
-                        onSelect={setActiveId}
-                        onAdd={addLayer}
-                        onRemove={removeLayer}
-                        onDuplicate={duplicateLayer}
-                        onToggleVisibility={toggleLayerVisibility}
-                        onReorder={reorderLayers}
-                      />
-                    </div>
-                    {activeShadow && (
-                      <div
-                        className="flex-1 min-h-[180px] pointer-events-auto animate-fade-up stagger-1"
-                        style={{
-                          filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
-                        }}
-                      >
-                        <div
-                          className="h-full rounded-2xl p-3 pb-2 flex flex-col gap-1 overflow-y-auto"
-                          style={{
-                            background: "var(--surface)",
-                            border: "1px solid var(--border)",
-                          }}
-                        >
-                          <div className="flex items-center justify-between mb-1 px-1 shrink-0">
-                            <span
-                              className="text-[10px] font-semibold uppercase tracking-wider"
-                              style={{ color: "var(--text-faint)" }}
-                            >
-                              Layer Controls
-                            </span>
-                            <span
-                              className="text-[10px] font-mono"
-                              style={{ color: "var(--text-faint)" }}
-                            >
-                              Layer{" "}
-                              {displayShadows.findIndex(
-                                (s) => s.id === activeId,
-                              ) + 1}
-                            </span>
-                          </div>
-                          <ShadowLayerControls
-                            key={activeShadow.id}
-                            shadow={activeShadow}
-                            onChange={(patch) =>
-                              updateLayer(activeShadow.id, patch)
-                            }
-                          />
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* Right panel: Tools */}
-                {showPanels && (
-                  <div
-                    className="absolute right-3 top-3 bottom-3 w-[270px] z-10 animate-fade-up pointer-events-auto rounded-2xl overflow-hidden"
-                    style={{
-                      background: "var(--surface)",
-                      border: "1px solid var(--border)",
-                      filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
-                    }}
-                  >
-                    <div
-                      className="flex flex-col gap-2 p-3 h-full overflow-y-auto"
-                      style={{
-                        scrollbarWidth: "thin",
-                        scrollbarColor: "rgba(255,255,255,0.08) transparent",
-                      }}
-                    >
-                      <ShadowInspector shadows={displayShadows} />
-                      <NaturalLanguageInput onApply={loadPreset} />
-                      <ShadowMorph shadows={shadows} onApply={loadPreset} />
-                      <DepthMeter onApply={loadPreset} />
-                      <GradientShadow onApply={loadPreset} />
-                      <ShadowDNA shadows={shadows} onLoadDNA={loadPreset} />
-                      <FocusRingGenerator activeShadow={activeShadow ?? null} />
-                      {activeShadow && (
-                        <ShadowPalette
-                          seed={activeShadow}
-                          onSelect={(s) => updateLayer(activeShadow.id, s)}
-                        />
-                      )}
-                      <div className="flex-1" />
-                    </div>
-                  </div>
-                )}
-
-                {/* Code panel: bottom center */}
-                {showPanels && (
-                  <div
-                    className="absolute bottom-3 left-[300px] right-[300px] h-[360px] z-10 animate-fade-up rounded-2xl overflow-hidden pointer-events-auto"
-                    style={{
-                      background: "var(--surface-code)",
-                      border: "1px solid var(--border)",
-                      filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
-                    }}
-                  >
-                    <CodeOutput shadows={displayShadows} />
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-        )}
-
-        {tab === "scale" && (
-          <div className="h-full overflow-y-auto p-4 animate-fade-up">
-            <div className="max-w-5xl mx-auto">
-              <ShadowScale isLight={isLight} />
-            </div>
-          </div>
-        )}
-
-        {tab === "presets" && (
-          <div className="h-full overflow-y-auto p-4 animate-fade-up">
-            <div className="max-w-5xl mx-auto">
-              <div className="mb-5">
-                <h2 className="text-xl mb-1" style={{ color: "var(--text)" }}>
-                  Shadow Presets
-                </h2>
-                <p className="text-sm" style={{ color: "var(--text-muted)" }}>
-                  Click any preset to load it into the editor.
-                </p>
-              </div>
-              <PresetsGallery
-                onLoad={(preset) => {
-                  loadPreset(preset);
-                  setTab("editor");
-                }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* ─── MOBILE BOTTOM TABS ─── */}
-        {isMobile && (
-          <>
-            {/* Bottom tab bar */}
+      {/* Features */}
+      <section id="features" className="max-w-6xl mx-auto px-6 py-20">
+        <h2 className="text-3xl font-bold text-center mb-12">
+          Everything you need for perfect shadows
+        </h2>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {features.map((f, i) => (
             <div
-              className="absolute bottom-0 left-0 right-0 z-20 flex items-center"
+              key={i}
+              className="rounded-2xl p-6"
               style={{
                 background: "var(--surface)",
-                borderTop: "1px solid var(--border)",
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
+                border: "1px solid var(--border)",
               }}
             >
-              {[
-                { id: "layers" as const, icon: Layers, label: "Layers" },
-                { id: "controls" as const, icon: Sliders, label: "Controls" },
-                { id: "tools" as const, icon: Wrench, label: "Tools" },
-                { id: "code" as const, icon: Code2, label: "Code" },
-              ].map(({ id, icon: Icon, label }) => {
-                const isActive = mobileTab === id;
-                return (
-                  <button
-                    key={id}
-                    onClick={() => setMobileTab(isActive ? null : id)}
-                    className="flex-1 flex flex-col items-center gap-0.5 py-2 transition-all duration-150 active:scale-95"
-                    style={{
-                      color: isActive ? "var(--accent)" : "var(--text-muted)",
-                    }}
-                  >
-                    <Icon size={18} strokeWidth={isActive ? 2.5 : 2} />
-                    <span className="text-[10px] font-semibold">{label}</span>
-                  </button>
-                );
-              })}
-
-              {/* Presets & Scale quick buttons */}
-              <div className="flex flex-col gap-0.5 items-center py-2 px-1">
-                {tab !== "editor" ? (
-                  <button
-                    onClick={() => setTab("editor")}
-                    className="text-[10px] font-semibold px-2 py-1 rounded-lg"
-                    style={{
-                      background:
-                        "color-mix(in srgb, var(--accent) 12%, transparent)",
-                      color: "var(--accent)",
-                    }}
-                  >
-                    Editor
-                  </button>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => setTab("presets")}
-                      className="text-[10px] font-semibold px-2 py-1 rounded-lg"
-                      style={{
-                        background: "transparent",
-                        color: "var(--text-muted)",
-                      }}
-                    >
-                      Presets
-                    </button>
-                    <button
-                      onClick={() => setTab("scale")}
-                      className="text-[10px] font-semibold px-2 py-1 rounded-lg"
-                      style={{
-                        background: "transparent",
-                        color: "var(--text-muted)",
-                      }}
-                    >
-                      Scale
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-
-            {/* Mobile tab panel overlay */}
-            {mobileTab && (
               <div
-                className="absolute left-0 right-0 z-30 animate-fade-up pointer-events-auto"
+                className="w-10 h-10 rounded-xl flex items-center justify-center mb-4 text-lg"
                 style={{
-                  bottom: 52,
-                  maxHeight: "55vh",
-                  background: "var(--surface)",
-                  borderTop: "1px solid var(--border)",
-                  borderRadius: "16px 16px 0 0",
-                  overflow: "hidden",
+                  background: "rgba(94,158,136,0.12)",
+                  color: "var(--accent)",
                 }}
               >
-                {/* Drag handle + close */}
-                <div className="flex items-center justify-between px-4 pt-2.5 pb-1.5 shrink-0">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-8 h-1 rounded-full"
-                      style={{ background: "var(--text-faint)" }}
-                    />
-                    <span
-                      className="text-xs font-semibold capitalize"
-                      style={{ color: "var(--text-muted)" }}
-                    >
-                      {mobileTab}
-                    </span>
-                  </div>
-                  <button
-                    onClick={closeMobileTab}
-                    className="w-7 h-7 flex items-center justify-center rounded-xl"
-                    style={{ color: "var(--text-muted)" }}
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-
-                {/* Scrollable content */}
-                <div
-                  className="overflow-y-auto px-3 pb-4"
-                  style={{ maxHeight: "calc(55vh - 40px)" }}
-                >
-                  {mobileTab === "layers" && (
-                    <div className="flex flex-col gap-2">
-                      <ShadowLayerList
-                        shadows={shadows}
-                        activeId={activeId}
-                        onSelect={setActiveId}
-                        onAdd={addLayer}
-                        onRemove={removeLayer}
-                        onDuplicate={duplicateLayer}
-                        onToggleVisibility={toggleLayerVisibility}
-                        onReorder={reorderLayers}
-                      />
-                    </div>
-                  )}
-
-                  {mobileTab === "controls" && activeShadow && (
-                    <div>
-                      <div className="flex items-center justify-between mb-2 px-1">
-                        <span
-                          className="text-xs font-semibold"
-                          style={{ color: "var(--text-muted)" }}
-                        >
-                          Layer{" "}
-                          {displayShadows.findIndex((s) => s.id === activeId) +
-                            1}
-                        </span>
-                      </div>
-                      <ShadowLayerControls
-                        key={activeShadow.id}
-                        shadow={activeShadow}
-                        onChange={(patch) =>
-                          updateLayer(activeShadow.id, patch)
-                        }
-                      />
-                    </div>
-                  )}
-
-                  {mobileTab === "tools" && (
-                    <div className="flex flex-col gap-2">
-                      <ShadowInspector shadows={displayShadows} />
-                      <NaturalLanguageInput onApply={loadPreset} />
-                      <ShadowMorph shadows={shadows} onApply={loadPreset} />
-                      <DepthMeter onApply={loadPreset} />
-                      <GradientShadow onApply={loadPreset} />
-                      <ShadowDNA shadows={shadows} onLoadDNA={loadPreset} />
-                      <FocusRingGenerator activeShadow={activeShadow ?? null} />
-                      {activeShadow && (
-                        <ShadowPalette
-                          seed={activeShadow}
-                          onSelect={(s) => updateLayer(activeShadow.id, s)}
-                        />
-                      )}
-                    </div>
-                  )}
-
-                  {mobileTab === "code" && (
-                    <div className="h-[280px] sm:h-[320px]">
-                      <CodeOutput shadows={displayShadows} />
-                    </div>
-                  )}
-                </div>
+                {f.icon}
               </div>
-            )}
-          </>
-        )}
-      </div>
-    </div>
+              <h3 className="text-lg font-semibold mb-2">{f.title}</h3>
+              <p
+                className="text-sm leading-relaxed"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {f.description}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="max-w-4xl mx-auto px-6 py-20">
+        <h2 className="text-3xl font-bold text-center mb-12">How it works</h2>
+        <div className="flex flex-col gap-6">
+          {steps.map((s, i) => (
+            <div key={i} className="flex items-start gap-4">
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-sm font-bold"
+                style={{ background: "var(--accent)", color: "#fff" }}
+              >
+                {i + 1}
+              </div>
+              <div>
+                <h3 className="font-semibold mb-1">{s.title}</h3>
+                <p
+                  className="text-sm leading-relaxed"
+                  style={{ color: "var(--text-muted)" }}
+                >
+                  {s.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Formats */}
+      <section className="max-w-4xl mx-auto px-6 py-20 text-center">
+        <h2 className="text-3xl font-bold mb-4">Export to any format</h2>
+        <p className="mb-8" style={{ color: "var(--text-muted)" }}>
+          Copy code in your preferred format and paste directly into your
+          project.
+        </p>
+        <div className="flex flex-wrap justify-center gap-2">
+          {[
+            "CSS",
+            "Tailwind",
+            "Tailwind Config",
+            "SCSS",
+            "CSS Variables",
+            "JavaScript",
+            "Flutter/Dart",
+          ].map((fmt) => (
+            <span
+              key={fmt}
+              className="px-4 py-2 rounded-xl text-sm font-medium"
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+              }}
+            >
+              {fmt}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="max-w-3xl mx-auto px-6 py-20">
+        <h2 className="text-3xl font-bold text-center mb-12">
+          Frequently asked questions
+        </h2>
+        <div className="flex flex-col gap-4">
+          {faq.map((item, i) => (
+            <details
+              key={i}
+              className="rounded-2xl p-5 group"
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+              }}
+            >
+              <summary className="font-semibold cursor-pointer list-none flex items-center justify-between">
+                {item.q}
+                <span className="text-xs opacity-50 group-open:rotate-180 transition-transform">
+                  v
+                </span>
+              </summary>
+              <p
+                className="mt-3 text-sm leading-relaxed"
+                style={{ color: "var(--text-muted)" }}
+              >
+                {item.a}
+              </p>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="text-center px-6 py-20">
+        <h2 className="text-3xl font-bold mb-4">
+          Ready to create your shadows?
+        </h2>
+        <p className="mb-8" style={{ color: "var(--text-muted)" }}>
+          No signup required. Free, open source, runs entirely in your browser.
+        </p>
+        <Link
+          href="/editor"
+          className="inline-block px-8 py-3 rounded-xl text-base font-semibold transition-all duration-150 active:scale-95"
+          style={{
+            background: "var(--accent)",
+            color: "#fff",
+          }}
+        >
+          Open Layerbox Editor
+        </Link>
+      </section>
+
+      {/* Footer */}
+      <footer
+        className="text-center px-6 py-8 text-sm"
+        style={{
+          color: "var(--text-faint)",
+          borderTop: "1px solid var(--border)",
+        }}
+      >
+        <p>Layerbox is open source. MIT License.</p>
+      </footer>
+    </main>
   );
 }
+
+const features = [
+  {
+    icon: "M",
+    title: "Multi-layer shadows",
+    description:
+      "Stack unlimited shadow layers with independent controls for offset, blur, spread, opacity, and color. Each layer can be toggled, reordered, duplicated, or deleted.",
+  },
+  {
+    icon: "R",
+    title: "Real-time preview",
+    description:
+      "See your changes instantly on an interactive canvas. Drag to pan, double-click to reset view. Preview on different shapes and background colors.",
+  },
+  {
+    icon: "E",
+    title: "Multiple export formats",
+    description:
+      "Export generated shadows as CSS, Tailwind CSS, SCSS, CSS variables, JavaScript objects, or Flutter/Dart code. Syntax-highlighted output with one-click copy.",
+  },
+  {
+    icon: "L",
+    title: "Light source engine",
+    description:
+      "Toggle a draggable light source to automatically compute shadow directions. Shadows respond realistically as you move the light around the canvas.",
+  },
+  {
+    icon: "D",
+    title: "Depth and material simulation",
+    description:
+      "Generate multi-layer shadow stacks from a single depth slider. Simulate surfaces like paper, glass, metal, frosted, fabric, and plastic.",
+  },
+  {
+    icon: "P",
+    title: "Preset library and sharing",
+    description:
+      "Browse 40+ curated presets across 10 categories. Share your shadow configurations via compact encoded URLs or Shadow DNA strings.",
+  },
+];
+
+const steps = [
+  {
+    title: "Add shadow layers",
+    description:
+      "Start with one or more shadow layers. Each layer has independent controls for horizontal and vertical offset, blur radius, spread, opacity, and color.",
+  },
+  {
+    title: "Adjust and preview",
+    description:
+      "Tweak each layer using the polar angle/distance widget or individual sliders. See real-time updates on the interactive canvas with your chosen shape and background.",
+  },
+  {
+    title: "Export your code",
+    description:
+      "Switch between CSS, Tailwind, SCSS, JavaScript, or Flutter format. Copy the syntax-highlighted code with one click and paste it directly into your project.",
+  },
+];
+
+const faq = [
+  {
+    q: "What is a CSS box shadow generator?",
+    a: "A CSS box shadow generator is a visual tool that helps you create box-shadow CSS declarations without writing code manually. You adjust sliders and controls to set offset, blur, spread, color, and other properties, and the tool generates the corresponding CSS code for you to copy and use in your projects.",
+  },
+  {
+    q: "How do I use Layerbox?",
+    a: "Open the editor, add shadow layers using the left panel, adjust each layer's properties (offset, blur, spread, opacity, color), preview the result on the canvas, and copy the generated code in your preferred format (CSS, Tailwind, SCSS, JS, or Flutter).",
+  },
+  {
+    q: "Can I create multi-layer shadows?",
+    a: "Yes. Layerbox supports unlimited shadow layers. You can add, remove, reorder, duplicate, and toggle visibility for each layer independently. Multi-layer shadows create depth and realism that single shadows cannot achieve.",
+  },
+  {
+    q: "What export formats are supported?",
+    a: "Layerbox supports CSS, Tailwind CSS arbitrary value syntax, Tailwind config theme extension, SCSS variables, CSS custom properties, JavaScript inline style objects, and Flutter/Dart BoxDecoration with BoxShadow list.",
+  },
+  {
+    q: "Is Layerbox free to use?",
+    a: "Yes. Layerbox is completely free and open source under the MIT License. It runs entirely in your browser with no backend, no signup, and no data collection.",
+  },
+  {
+    q: "Can I share my shadow configurations?",
+    a: "Yes. Layerbox encodes your entire shadow configuration into the URL query parameter, so you can share a link with anyone. You can also use the Shadow DNA feature to encode/decode shadows as compact strings.",
+  },
+];
