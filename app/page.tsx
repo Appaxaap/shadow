@@ -25,6 +25,7 @@ import { NaturalLanguageInput } from "../components/controls/NaturalLanguageInpu
 import { ShadowPreview } from "../components/preview/ShadowPreview";
 import { useShadowState } from "../hooks/useShadowState";
 import { ShadowScale } from "../components/scale/ShadowScale";
+import { ShadowInspector } from "../components/controls/ShadowInspector";
 import { DEFAULT_MATERIAL, type MaterialId } from "../lib/materials";
 
 export default function Home() {
@@ -365,6 +366,7 @@ export default function Home() {
                     scrollbarColor: "rgba(255,255,255,0.08) transparent",
                   }}
                 >
+                  <ShadowInspector shadows={displayShadows} />
                   <NaturalLanguageInput onApply={loadPreset} />
                   <ShadowMorph shadows={shadows} onApply={loadPreset} />
                   <DepthMeter onApply={loadPreset} />
