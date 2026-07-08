@@ -169,7 +169,7 @@ export default function Home() {
             </div>
 
             {/* ─── Layout 1: Layers + Controls (left) ─── */}
-            <div className="absolute left-3 top-3 bottom-[275px] w-[270px] flex flex-col gap-2 z-10 pointer-events-none">
+            <div className="absolute left-3 top-3 bottom-3 w-[270px] flex flex-col gap-2 z-10 pointer-events-none">
               {/* Layers panel */}
               <div
                 className="shrink-0 pointer-events-auto animate-fade-up rounded-2xl p-3"
@@ -233,7 +233,7 @@ export default function Home() {
 
             {/* ─── Panel C: Properties / Tools (right) ─── */}
             <div
-              className="absolute right-3 top-3 bottom-[275px] w-[270px] z-10 animate-fade-up overflow-y-auto pointer-events-auto"
+              className="absolute right-3 top-3 bottom-3 w-[270px] z-10 animate-fade-up overflow-y-auto pointer-events-auto"
               style={{
                 scrollbarWidth: "thin",
                 scrollbarColor: "rgba(255,255,255,0.08) transparent",
