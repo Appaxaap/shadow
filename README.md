@@ -2,7 +2,7 @@
 
 > **A professional CSS `box-shadow` generator with multi-layer control, real-time preview, and cross-format code export.**
 
-Design, visualize, and export complex box-shadow stacks with pixel-perfect precision. Layerbox gives you the tools of a professional design tool — polar angle/distance controls, material simulation, light sources, shadow morphing, and a depth engine — all in the browser. Live at [layerbox.vercel.app](https://layerbox.vercel.app/).
+Design, visualize, and export complex box-shadow stacks with pixel-perfect precision. Layerbox gives you the tools of a professional design tool - polar angle/distance controls, material simulation, light sources, shadow morphing, and a depth engine - all in the browser. Live at [layerbox.vercel.app](https://layerbox.vercel.app/).
 
 ---
 
@@ -25,12 +25,12 @@ Design, visualize, and export complex box-shadow stacks with pixel-perfect preci
 - Each layer gets its own full set of independent controls
 
 ### 🎛 Per-Layer Controls
-- **Angle / Distance polar control** — a visual direction widget with NSEW labels replaces raw X/Y sliders
-- **Blur radius** — 0–200px
-- **Spread radius** — -50px to 100px
-- **Opacity** — 0–100%
-- **Color picker** — full `react-colorful` dialog with hex input
-- **Inset toggle** — switch between drop shadow and inset shadow
+- **Angle / Distance polar control** - a visual direction widget with NSEW labels replaces raw X/Y sliders
+- **Blur radius** - 0–200px
+- **Spread radius** - -50px to 100px
+- **Opacity** - 0–100%
+- **Color picker** - full `react-colorful` dialog with hex input
+- **Inset toggle** - switch between drop shadow and inset shadow
 
 ### 💬 Natural Language Shadow Input
 Describe shadows in plain English and let the parser generate layers automatically:
@@ -42,9 +42,9 @@ Describe shadows in plain English and let the parser generate layers automatical
 "deep multi-layer shadow bottom right"
 ```
 
-A rule-based engine handles intensity, direction, style, layering, and color hints — no AI needed.
+A rule-based engine handles intensity, direction, style, layering, and color hints - no AI needed.
 
-### ⏯ Shadow Morph (A → B Transition)
+### ⏯ Shadow Morph (A -> B Transition)
 Create animated shadow transitions between two states:
 - Configure State B's blur, spread, opacity, color
 - **Play / Pause** the morph animation
@@ -62,7 +62,7 @@ Generate multi-layer shadow stacks that simulate smooth gradient falloff:
 
 ### 📏 Depth Meter
 A distance-from-surface slider (0–100%) that auto-generates 3–5 shadow layers:
-- **Flat → Raised → Lifted → Floating → Hovering → Levitated**
+- **Flat -> Raised -> Lifted -> Floating -> Hovering -> Levitated**
 - Color picker for the shadow color
 - Live mini-preview
 - One-click **Apply Depth** to load the generated layers into the editor
@@ -87,15 +87,15 @@ Generate WCAG-accessible `:focus-visible` rings based on the active layer's colo
 
 ### 🧬 Shadow DNA
 Encode/decode your entire shadow configuration as a compact, URL-safe string:
-- **Export DNA** — copy the compact string
-- **Import DNA** — paste a string to restore a configuration
+- **Export DNA** - copy the compact string
+- **Import DNA** - paste a string to restore a configuration
 - Perfect for sharing designs in a single line
 
 ### ↩️ Undo / Redo
 Full history with keyboard shortcuts:
-- `Ctrl/Cmd + Z` — Undo
-- `Ctrl/Cmd + Shift + Z` — Redo
-- `Ctrl/Cmd + Y` — Redo
+- `Ctrl/Cmd + Z` - Undo
+- `Ctrl/Cmd + Shift + Z` - Redo
+- `Ctrl/Cmd + Y` - Redo
 - History depth: 30 states
 
 ### 📊 Smart Shadow Inspector
@@ -110,7 +110,7 @@ Real-time statistics for the current shadow configuration:
 
 ### 🔄 Hover / Focus / Active State Preview
 Simulate CSS interaction states directly on the preview canvas:
-- **Normal → Hover → Focus → Active**
+- **Normal -> Hover -> Focus -> Active**
 - See the shadow and scale transform applied in real time
 - CSS transition output shown below the canvas for the active state
 
@@ -120,7 +120,7 @@ Simulate CSS interaction states directly on the preview canvas:
 - **Rotation**: 0°, 45°, 90°, 180° applied to the preview element
 
 ### ☀🌙 Quick Theme Comparison (Split View)
-Toggle split-view to see the same shadow rendered simultaneously on **dark** and **light** backgrounds — side by side.
+Toggle split-view to see the same shadow rendered simultaneously on **dark** and **light** backgrounds - side by side.
 
 ### 🖱 Figma-Style Draggable Canvas
 - **Pan** the canvas by dragging (mouse or touch)
@@ -171,7 +171,7 @@ Browse and load presets organized by category with visual mini-previews:
 **Subtle** · **Elevated** · **Material** · **Apple** · **Soft UI** · **Glassmorphism** · **Neumorphism** · **Dashboard** · **Colored** · **Inset**
 
 ### 📐 Shadow Scale Page
-A dedicated page that visualizes all your shadow layers side-by-side with elevation labels — ideal for designing consistent shadow systems.
+A dedicated page that visualizes all your shadow layers side-by-side with elevation labels - ideal for designing consistent shadow systems.
 
 ### 📋 Multiple Export Formats
 
@@ -188,7 +188,7 @@ A dedicated page that visualizes all your shadow layers side-by-side with elevat
 All code output is **syntax-highlighted** with a custom tokenizer supporting CSS, JavaScript/TypeScript, Dart/Flutter, JSON, and SCSS.
 
 ### 🔗 URL-Based Sharing
-Shadow state is automatically encoded into the URL query parameter `?s=...`. Copy the URL to share your exact configuration — no backend required.
+Shadow state is automatically encoded into the URL query parameter `?s=...`. Copy the URL to share your exact configuration - no backend required.
 
 ---
 
@@ -293,15 +293,15 @@ components/
     CodeOutput.tsx               -- Code export panel with format switching + copy
     ShadowDNA.tsx                -- Shadow DNA encode/decode panel
   controls/
-    DepthMeter.tsx               -- Distance-from-surface → auto-generated layers
+    DepthMeter.tsx               -- Distance-from-surface -> auto-generated layers
     FocusRingGenerator.tsx       -- WCAG focus-visible ring generator
     GradientShadow.tsx           -- Multi-layer gradient falloff generator
-    NaturalLanguageInput.tsx     -- Plain English → shadow parser
+    NaturalLanguageInput.tsx     -- Plain English -> shadow parser
     PresetsGallery.tsx           -- 40+ preset browser with categories
     ShadowInspector.tsx          -- Real-time stats panel
     ShadowLayerControls.tsx      -- Per-layer: angle/distance, blur, spread, opacity, color, inset
     ShadowLayerList.tsx          -- Layer list with drag-to-reorder
-    ShadowMorph.tsx              -- A→B shadow transition with animation output
+    ShadowMorph.tsx              -- A -> B shadow transition with animation output
     ShadowPalette.tsx            -- 6 harmonized variations from selected layer
   preview/
     LightSourceOverlay.tsx       -- Draggable light orb on the canvas
@@ -314,13 +314,13 @@ lib/
   depthMeter.ts                  -- Depth-to-multi-layer-shadow algorithm
   exportFormats.ts               -- All export format generators (CSS, TW, SCSS, JS, Flutter)
   gradientShadow.ts              -- Gradient shadow parameter types + generator
-  lightSource.ts                 -- Light position → shadow offset calculation
+  lightSource.ts                 -- Light position -> shadow offset calculation
   materials.ts                   -- Material definitions and color modifiers
   naturalLanguage.ts             -- Tokeniser + parser + generator for NL input
   presets.ts                     -- 40+ curated preset definitions across categories
   shadowDna.ts                   -- Base62 encode/decode for compact sharing
   shadowPalette.ts               -- Palette generation (Subtle, Bold, Ethereal, etc.)
-  shadowUtils.ts                 -- CSS string generation, hex→rgba, URL encode/decode
+  shadowUtils.ts                 -- CSS string generation, hex -> rgba, URL encode/decode
   syntaxHighlight.ts             -- Custom tokenizer for syntax-highlighted code
   types.ts                       -- TypeScript types (Shadow, PreviewShape, etc.)
 ```
@@ -423,7 +423,7 @@ npm run dev
 
 ### Guidelines
 
-- Keep changes focused and surgical — avoid unnecessary refactoring of unrelated code
+- Keep changes focused and surgical - avoid unnecessary refactoring of unrelated code
 - Maintain the existing code style (TypeScript, functional components, CSS custom properties for theming)
 - Test your changes by running `npm run build` and visually verifying the editor
 - For bug reports or feature ideas, open a [GitHub Issue](https://github.com/Appaxaap/shadow/issues)

@@ -1,5 +1,5 @@
 /**
- * Material Simulator — defines surface materials that affect
+ * Material Simulator - defines surface materials that affect
  * how shadows appear on the preview canvas.
  *
  * Each material provides:
@@ -112,12 +112,12 @@ export function applyMaterialToColor(rgba: string, material: Material): string {
   // Apply lightness multiplier (darker surface = more absorbed = lighter shadow)
   const factor = material.shadowLightness;
   if (factor < 1) {
-    // Absorbing surface — shadow gets lighter
+    // Absorbing surface - shadow gets lighter
     r = Math.min(255, Math.round(r + (255 - r) * (1 - factor)));
     g = Math.min(255, Math.round(g + (255 - g) * (1 - factor)));
     b = Math.min(255, Math.round(b + (255 - b) * (1 - factor)));
   } else {
-    // Reflective surface — shadow gets darker
+    // Reflective surface - shadow gets darker
     const extra = factor - 1;
     r = Math.max(0, Math.round(r - r * extra * 0.3));
     g = Math.max(0, Math.round(g - g * extra * 0.3));

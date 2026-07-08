@@ -2,7 +2,7 @@
  * Gradient Shadow Generator
  *
  * Creates a multi-layer shadow stack that simulates a smooth
- * gradient falloff — each layer is progressively more blurred
+ * gradient falloff - each layer is progressively more blurred
  * and more transparent, producing a natural "glow" effect that
  * single-layer shadows can't achieve.
  */
@@ -37,9 +37,7 @@ export const DEFAULT_GRADIENT_PARAMS: GradientShadowParams = {
 /**
  * Generate a gradient shadow stack from the given parameters.
  */
-export function generateGradientShadow(
-  params: GradientShadowParams,
-): Shadow[] {
+export function generateGradientShadow(params: GradientShadowParams): Shadow[] {
   const { layers, falloff, depth, color, xOffset, yOffset } = params;
   const shadows: Shadow[] = [];
 
@@ -54,7 +52,10 @@ export function generateGradientShadow(
       y: Math.round(yOffset * (1 + progress * 0.5)),
       blur: Math.max(1, Math.round(2 * blurStep * (depth / 20))),
       spread: 0,
-      opacity: Math.max(0, parseFloat(((depth / 100) * opacityStep * 0.2).toFixed(3))),
+      opacity: Math.max(
+        0,
+        parseFloat(((depth / 100) * opacityStep * 0.2).toFixed(3)),
+      ),
       color,
       inset: false,
       visible: true,

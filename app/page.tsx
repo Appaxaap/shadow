@@ -270,7 +270,7 @@ export default function Home() {
       <div className="flex-1 min-h-0 overflow-hidden">
         {tab === "editor" && (
           <div className="h-full min-h-0 relative">
-            {/* Full-bleed preview — lowest layer */}
+            {/* Full-bleed preview - lowest layer */}
             <div className="absolute inset-0">
               <ShadowPreview
                 shadows={displayShadows}

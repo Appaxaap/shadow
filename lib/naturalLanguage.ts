@@ -2,14 +2,14 @@
  * Natural Language Shadow Parser.
  *
  * A rule-based engine that converts plain English descriptions
- * into shadow layer configurations. No AI needed — just smart
+ * into shadow layer configurations. No AI needed - just smart
  * keyword matching and sensible defaults.
  *
  * Examples:
- *   "soft drop shadow to the right" →
- *   "elevated card with a warm glow" →
- *   "pressed inset shadow on a button" →
- *   "floating in deep space with multiple layers" →
+ *   "soft drop shadow to the right" ->
+ *   "elevated card with a warm glow" ->
+ *   "pressed inset shadow on a button" ->
+ *   "floating in deep space with multiple layers" ->
  */
 
 import type { Shadow } from "./types";
@@ -189,18 +189,23 @@ function parse(tokens: Token[]): ParsedIntent {
   for (const t of tokens) {
     // Intensity
     if (t.isIntensity) {
-      if (
-        ["subtle", "gentle", "faint", "barely", "mild"].includes(t.word)
-      ) {
+      if (["subtle", "gentle", "faint", "barely", "mild"].includes(t.word)) {
         intent.intensity = "subtle";
       } else if (["light", "soft"].includes(t.word)) {
         intent.intensity = "light";
       } else if (["medium", "mild"].includes(t.word)) {
         intent.intensity = "medium";
       } else if (
-        ["strong", "heavy", "bold", "intense", "powerful", "super", "ultra", "extra"].includes(
-          t.word,
-        )
+        [
+          "strong",
+          "heavy",
+          "bold",
+          "intense",
+          "powerful",
+          "super",
+          "ultra",
+          "extra",
+        ].includes(t.word)
       ) {
         intent.intensity = "strong";
       } else if (["deep", "very"].includes(t.word)) {
@@ -213,9 +218,15 @@ function parse(tokens: Token[]): ParsedIntent {
       if (["top", "above", "upward", "up", "upper", "north"].includes(t.word)) {
         intent.direction = "top";
       } else if (
-        ["bottom", "below", "under", "downward", "down", "lower", "south"].includes(
-          t.word,
-        )
+        [
+          "bottom",
+          "below",
+          "under",
+          "downward",
+          "down",
+          "lower",
+          "south",
+        ].includes(t.word)
       ) {
         intent.direction = "bottom";
       } else if (["left", "west", "side"].includes(t.word)) {
@@ -315,7 +326,10 @@ const INTENSITY_OPACITY: Record<Intensity, number> = {
   deep: 0.35,
 };
 
-function styleColor(colorHint: string, opacity: number): { color: string; opacity: number } {
+function styleColor(
+  colorHint: string,
+  opacity: number,
+): { color: string; opacity: number } {
   switch (colorHint) {
     case "warm":
       return { color: "#8B5E3C", opacity };
@@ -365,8 +379,13 @@ function generateShadows(intent: ParsedIntent): Shadow[] {
   }
 
   if (intent.style === "glow" || intent.glow) {
-    // Glow effect — symmetrical, wide, colored light
-    const glowColor = intent.colorHint === "warm" ? "#FF8C42" : intent.colorHint === "cool" ? "#4296FF" : color;
+    // Glow effect - symmetrical, wide, colored light
+    const glowColor =
+      intent.colorHint === "warm"
+        ? "#FF8C42"
+        : intent.colorHint === "cool"
+          ? "#4296FF"
+          : color;
     shadows.push({
       id: genId(),
       x: 0,
@@ -433,7 +452,8 @@ function generateShadows(intent: ParsedIntent): Shadow[] {
   }
 
   // Standard / natural / soft / sharp
-  const blurMult = intent.style === "sharp" ? 0.3 : intent.style === "soft" ? 1.5 : 0.8;
+  const blurMult =
+    intent.style === "sharp" ? 0.3 : intent.style === "soft" ? 1.5 : 0.8;
 
   const numLayers = intent.layers;
 

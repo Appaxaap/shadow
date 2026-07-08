@@ -1,5 +1,5 @@
 /**
- * Shadow DNA — encode/decode a shadow config into a short shareable string.
+ * Shadow DNA - encode/decode a shadow config into a short shareable string.
  *
  * Format:
  *   Each layer is encoded as a compact string:

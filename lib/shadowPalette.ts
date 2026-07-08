@@ -1,14 +1,14 @@
 /**
- * Shadow Palette — generates a family of harmonized shadow variations
+ * Shadow Palette - generates a family of harmonized shadow variations
  * from a single seed shadow.
  *
  * Produces 6 variations:
- *   Subtle    — soft, gentle, low opacity
- *   Bold      — strong, deep, high contrast
- *   Ethereal  — wide, light, floating
- *   Sharp     — tight, precise, close
- *   Warm      — shifted toward amber/orange
- *   Cool      — shifted toward blue/teal
+ *   Subtle    - soft, gentle, low opacity
+ *   Bold      - strong, deep, high contrast
+ *   Ethereal  - wide, light, floating
+ *   Sharp     - tight, precise, close
+ *   Warm      - shifted toward amber/orange
+ *   Cool      - shifted toward blue/teal
  */
 
 import type { Shadow } from "./types";

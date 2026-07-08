@@ -2,7 +2,7 @@
   "name": "layerbox",
   "version": "0.2.0",
   "private": false,
-  "description": "Professional CSS box-shadow generator — multi-layer control, real-time preview, and cross-format code export",
+  "description": "Professional CSS box-shadow generator - multi-layer control, real-time preview, and cross-format code export",
   "keywords": [
     "box-shadow",
     "css",

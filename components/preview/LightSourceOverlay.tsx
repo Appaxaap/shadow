@@ -53,7 +53,7 @@ export function LightSourceOverlay({ lightState, onChange }: Props) {
       onPointerLeave={handlePointerUp}
       style={{ touchAction: "none" }}
     >
-      {/* Light ray lines — subtle indicators from light to centre */}
+      {/* Light ray lines - subtle indicators from light to centre */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none">
         <line
           x1={`${px}%`}

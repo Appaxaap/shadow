@@ -101,7 +101,7 @@ export function ShadowPreview({
       originX: panState.current.x,
       originY: panState.current.y,
     };
-    // Direct DOM — avoid React re-render lag during drag
+    // Direct DOM - avoid React re-render lag during drag
     if (contentRef.current) {
       contentRef.current.style.transition = "none";
     }
@@ -121,7 +121,7 @@ export function ShadowPreview({
       Math.min(bound, panStart.current.originY + dy),
     );
     panState.current = { x: newX, y: newY };
-    // Direct DOM — skip React reconciliation for 60fps
+    // Direct DOM - skip React reconciliation for 60fps
     if (contentRef.current) {
       contentRef.current.style.transform = `translate(${newX}px, ${newY}px)`;
     }
@@ -177,7 +177,7 @@ export function ShadowPreview({
   const shadowValue = shadowsToCssValue(materialShadows);
   const primaryVisible = shadows.find((s) => s.visible !== false);
 
-  // Canvas background — custom or theme-based
+  // Canvas background - custom or theme-based
   const defaultBg = isLight ? "#F0F3F2" : "#0e1a1a";
   const canvasBg = previewBg || defaultBg;
   const dotColor = isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.055)";
@@ -632,7 +632,7 @@ export function ShadowPreview({
         </div>
       </div>
 
-      {/* Element size + rotation controls — bottom center */}
+      {/* Element size + rotation controls - bottom center */}
       <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-30 animate-fade-up">
         {/* Rotation buttons */}
         <div

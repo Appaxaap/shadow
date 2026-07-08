@@ -41,7 +41,7 @@ export function ShadowDNA({ shadows, onLoadDNA }: Props) {
     }
     const decoded = decodeDNA(trimmed);
     if (!decoded) {
-      setImportError("Invalid DNA — check the string and try again");
+      setImportError("Invalid DNA - check the string and try again");
       return;
     }
     setImportError("");
@@ -123,11 +123,7 @@ export function ShadowDNA({ shadows, onLoadDNA }: Props) {
                 border: `1px solid ${copied ? "color-mix(in srgb, var(--accent) 30%, transparent)" : "var(--border)"}`,
               }}
             >
-              {copied ? (
-                <Check size={12} />
-              ) : (
-                <Copy size={12} />
-              )}
+              {copied ? <Check size={12} /> : <Copy size={12} />}
               {copied ? "Copied!" : "Copy DNA"}
             </button>
 

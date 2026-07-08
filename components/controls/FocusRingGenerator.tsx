@@ -25,7 +25,7 @@ function generateFocusRing(shadow: Shadow | null): {
   const b = parseInt(baseColor.slice(5, 7), 16);
   const ringColor = `rgba(${r},${g},${b},0.6)`;
 
-  const css = `/* Focus ring — accessible + on-brand */
+  const css = `/* Focus ring - accessible + on-brand */
 *:focus-visible {
   outline: none;
   box-shadow:
