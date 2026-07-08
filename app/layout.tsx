@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Instrument_Serif } from "next/font/google";
+import { Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const instrumentSerif = Instrument_Serif({
@@ -7,6 +7,12 @@ const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
   style: ["normal", "italic"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -45,7 +51,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Runs synchronously before any paint - prevents theme flash
 const themeScript = `
 try {
   if (localStorage.getItem('sg-theme') === 'light') {
@@ -78,9 +83,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={instrumentSerif.variable}>
+    <html
+      lang="en"
+      className={`${instrumentSerif.variable} ${jetbrainsMono.variable}`}
+    >
       <head>
-        {/* eslint-disable-next-line @next/next/no-before-interactive-script-component */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script
           type="application/ld+json"
