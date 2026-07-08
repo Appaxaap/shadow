@@ -68,7 +68,14 @@ body {
     margin: 0;
     padding: 0;
     height: 100%;
-    /* overflow stays default - never hidden on body/html, that breaks position:fixed portals */
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+/* Ensure fixed-position portals (color picker) work with overflow:hidden */
+#__next,
+#root {
+    height: 100%;
 }
 
 html {

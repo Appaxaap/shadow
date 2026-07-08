@@ -35,16 +35,18 @@ import { DEFAULT_MATERIAL, type MaterialId } from "../lib/materials";
 type MobileTab = "layers" | "controls" | "tools" | "code" | null;
 
 function useMobile() {
-  const [mobile, setMobile] = useState(false);
+  const [mobile, setMobile] = useState(true);
+  const [ready, setReady] = useState(false);
   useEffect(() => {
     function check() {
-      setMobile(window.innerWidth < 768);
+      setMobile(window.innerWidth < 1024);
     }
     check();
+    setReady(true);
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
   }, []);
-  return mobile;
+  return { mobile, ready };
 }
 
 export default function Home() {
@@ -75,7 +77,7 @@ export default function Home() {
   const [showPanels, setShowPanels] = useState(true);
   const [bgId, setBgId] = useState("light");
   const [mobileTab, setMobileTab] = useState<MobileTab>(null);
-  const mobile = useMobile();
+  const { mobile: isMobile, ready } = useMobile();
 
   const bgMap: Record<string, string> = {
     light: "#F0F3F2",
@@ -137,7 +139,10 @@ export default function Home() {
   const closeMobileTab = useCallback(() => setMobileTab(null), []);
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden sg-page">
+    <div
+      className="flex flex-col overflow-hidden sg-page"
+      style={{ height: "100dvh" }}
+    >
       {/* ─── HEADER ─── */}
       <header
         className="shrink-0 flex items-center px-3 sm:px-5 animate-fade-in"
@@ -146,7 +151,7 @@ export default function Home() {
           background: "var(--header-bg)",
           backdropFilter: "blur(12px)",
           WebkitBackdropFilter: "blur(12px)",
-          height: mobile ? 48 : 52,
+          height: isMobile ? 48 : 52,
         }}
       >
         <div className="flex items-center gap-2 flex-1 min-w-0">
@@ -170,7 +175,7 @@ export default function Home() {
 
         <div className="flex items-center gap-1.5 sm:gap-2">
           {/* Tab switcher - hidden on mobile */}
-          {!mobile && (
+          {!isMobile && (
             <div
               className="flex items-center gap-0.5 p-0.5 rounded-xl"
               style={{
@@ -214,7 +219,7 @@ export default function Home() {
               aria-label="Undo"
               title="Undo (Ctrl+Z)"
             >
-              <Undo2 size={mobile ? 11 : 13} />
+              <Undo2 size={isMobile ? 11 : 13} />
             </button>
             <button
               onClick={redo}
@@ -229,7 +234,7 @@ export default function Home() {
               aria-label="Redo"
               title="Redo (Ctrl+Shift+Z)"
             >
-              <Redo2 size={mobile ? 11 : 13} />
+              <Redo2 size={isMobile ? 11 : 13} />
             </button>
           </div>
 
@@ -247,11 +252,11 @@ export default function Home() {
             aria-label="Toggle light source"
             title="Drag a light source to control shadow direction"
           >
-            <Lightbulb size={mobile ? 12 : 14} />
+            <Lightbulb size={isMobile ? 12 : 14} />
           </button>
 
           {/* Toggle panels - desktop only */}
-          {!mobile && (
+          {!isMobile && (
             <button
               onClick={() => setShowPanels((v) => !v)}
               className="w-8 h-8 flex items-center justify-center rounded-xl transition-all duration-150 active:scale-90"
@@ -285,9 +290,9 @@ export default function Home() {
             aria-label="Toggle theme"
           >
             {isLight ? (
-              <Moon size={mobile ? 12 : 14} />
+              <Moon size={isMobile ? 12 : 14} />
             ) : (
-              <Sun size={mobile ? 12 : 14} />
+              <Sun size={isMobile ? 12 : 14} />
             )}
           </button>
         </div>
@@ -314,7 +319,7 @@ export default function Home() {
             </div>
 
             {/* ─── DESKTOP LAYOUT ─── */}
-            {!mobile && (
+            {!isMobile && (
               <>
                 {/* Left panel: Layers + Controls */}
                 {showPanels && (
@@ -465,7 +470,7 @@ export default function Home() {
         )}
 
         {/* ─── MOBILE BOTTOM TABS ─── */}
-        {mobile && (
+        {isMobile && (
           <>
             {/* Bottom tab bar */}
             <div
