@@ -28,6 +28,13 @@ export function ShadowMorph({ shadows, onApply }: Props) {
   const [duration, setDuration] = useState(0.3);
   const [playing, setPlaying] = useState(false);
   const [atB, setAtB] = useState(false);
+  const [codeMode, setCodeMode] = useState<"transition" | "keyframes">(
+    "transition",
+  );
+  const [animationIterations, setAnimationIterations] = useState("infinite");
+  const [animationEasing, setAnimationEasing] = useState(
+    "cubic-bezier(0.16, 1, 0.3, 1)",
+  );
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Capture the current State A as a baseline
@@ -81,14 +88,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
     setAtB(false);
   }, []);
 
-  const cssCode = `/* Morph transition */
-.preview-element {
-  box-shadow: ${shadowsToCssValue(shadows)};
-  transition: box-shadow ${duration}s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.preview-element:hover {
-  box-shadow: ${shadowsToCssValue([
+  const bValue = shadowsToCssValue([
     {
       ...(shadows[0] || DEFAULT_B_SHADOW),
       x: bShadow.x,
@@ -98,8 +98,35 @@ export function ShadowMorph({ shadows, onApply }: Props) {
       opacity: bShadow.opacity,
       color: bShadow.color,
     },
-  ])};
+  ]);
+
+  const transitionCss = `/* Morph transition */
+.preview-element {
+  box-shadow: ${shadowsToCssValue(shadows)};
+  transition: box-shadow ${duration}s ${animationEasing};
+}
+
+.preview-element:hover {
+  box-shadow: ${bValue};
 }`;
+
+  const keyframesCss = `/* Shadow keyframe animation */
+@keyframes shadow-morph {
+  0%, 100% {
+    box-shadow: ${shadowsToCssValue(shadows)};
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: ${bValue};
+    transform: scale(1.03);
+  }
+}
+
+.preview-element {
+  animation: shadow-morph ${duration}s ${animationEasing} ${animationIterations};
+}`;
+
+  const cssCode = codeMode === "transition" ? transitionCss : keyframesCss;
 
   return (
     <div
@@ -362,6 +389,108 @@ export function ShadowMorph({ shadows, onApply }: Props) {
             </div>
           </div>
 
+          {/* Code mode toggle */}
+          <div
+            className="flex items-center gap-1 p-0.5 rounded-xl"
+            style={{
+              background: "var(--surface-raised)",
+              border: "1px solid var(--border)",
+            }}
+          >
+            <button
+              onClick={() => setCodeMode("transition")}
+              className="flex-1 px-2 py-1 text-[10px] font-semibold rounded-lg transition-all active:scale-95"
+              style={{
+                background:
+                  codeMode === "transition" ? "var(--surface)" : "transparent",
+                color:
+                  codeMode === "transition"
+                    ? "var(--text)"
+                    : "var(--text-muted)",
+                border:
+                  codeMode === "transition"
+                    ? "1px solid var(--border-hover)"
+                    : "1px solid transparent",
+              }}
+            >
+              Transition CSS
+            </button>
+            <button
+              onClick={() => setCodeMode("keyframes")}
+              className="flex-1 px-2 py-1 text-[10px] font-semibold rounded-lg transition-all active:scale-95"
+              style={{
+                background:
+                  codeMode === "keyframes" ? "var(--surface)" : "transparent",
+                color:
+                  codeMode === "keyframes"
+                    ? "var(--text)"
+                    : "var(--text-muted)",
+                border:
+                  codeMode === "keyframes"
+                    ? "1px solid var(--border-hover)"
+                    : "1px solid transparent",
+              }}
+            >
+              @keyframes
+            </button>
+          </div>
+
+          {/* Animation options (keyframes mode only) */}
+          {codeMode === "keyframes" && (
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
+                <label
+                  className="text-[10px] font-medium"
+                  style={{ color: "var(--text-faint)" }}
+                >
+                  Loop
+                </label>
+                <select
+                  value={animationIterations}
+                  onChange={(e) => setAnimationIterations(e.target.value)}
+                  className="text-[10px] font-mono rounded-lg px-2 py-1 outline-none"
+                  style={{
+                    background: "var(--surface-raised)",
+                    border: "1px solid var(--border)",
+                    color: "var(--text)",
+                  }}
+                >
+                  <option value="infinite">∞</option>
+                  <option value="1">1x</option>
+                  <option value="2">2x</option>
+                  <option value="3">3x</option>
+                  <option value="5">5x</option>
+                </select>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <label
+                  className="text-[10px] font-medium"
+                  style={{ color: "var(--text-faint)" }}
+                >
+                  Easing
+                </label>
+                <select
+                  value={animationEasing}
+                  onChange={(e) => setAnimationEasing(e.target.value)}
+                  className="text-[10px] font-mono rounded-lg px-2 py-1 outline-none max-w-[120px]"
+                  style={{
+                    background: "var(--surface-raised)",
+                    border: "1px solid var(--border)",
+                    color: "var(--text)",
+                  }}
+                >
+                  <option value="cubic-bezier(0.16, 1, 0.3, 1)">
+                    Ease-out
+                  </option>
+                  <option value="ease-in-out">Ease-in-out</option>
+                  <option value="ease-in">Ease-in</option>
+                  <option value="ease-out">Ease-out</option>
+                  <option value="linear">Linear</option>
+                </select>
+              </div>
+            </div>
+          )}
+
           {/* Code output */}
           <div
             className="rounded-xl p-2.5 text-[10px] font-mono leading-relaxed whitespace-pre select-all"
@@ -369,7 +498,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
               background: "var(--surface-code)",
               border: "1px solid var(--border)",
               color: "var(--text-muted)",
-              maxHeight: 100,
+              maxHeight: 120,
               overflow: "auto",
             }}
           >
