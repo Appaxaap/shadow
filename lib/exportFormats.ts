@@ -102,5 +102,7 @@ export function getFormatCode(format: ExportFormat, shadows: Shadow[]): string {
       return toJs(shadows);
     case "flutter":
       return toFlutter(shadows);
+    default:
+      return toCss(shadows);
   }
 }

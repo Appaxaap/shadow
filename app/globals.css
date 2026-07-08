@@ -190,6 +190,9 @@ html.light body::before {
 .stagger-3 {
     animation-delay: 0.12s;
 }
+.stagger-4 {
+    animation-delay: 0.16s;
+}
 
 ::-webkit-scrollbar {
     width: 4px;
