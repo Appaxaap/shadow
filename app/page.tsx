@@ -194,6 +194,7 @@ export default function Home() {
                 onLightChange={setLightPosition}
                 materialId={materialId}
                 onMaterialChange={setMaterialId}
+                panUnbounded={!showPanels}
               />
             </div>
 

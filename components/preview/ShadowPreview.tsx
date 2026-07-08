@@ -19,6 +19,7 @@ type Props = {
   onLightChange?: (lx: number, ly: number) => void;
   materialId?: MaterialId;
   onMaterialChange?: (id: MaterialId) => void;
+  panUnbounded?: boolean;
 };
 
 const SHAPES: { label: string; value: PreviewShape }[] = [
@@ -37,6 +38,7 @@ export function ShadowPreview({
   onLightChange,
   materialId = "paper",
   onMaterialChange,
+  panUnbounded = false,
 }: Props) {
   const [shape, setShape] = useState<PreviewShape>("box");
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -65,13 +67,14 @@ export function ShadowPreview({
     if (!isPanning.current) return;
     const dx = e.clientX - panStart.current.clientX;
     const dy = e.clientY - panStart.current.clientY;
+    const bound = panUnbounded ? 5000 : PAN_BOUNDS;
     const newX = Math.max(
-      -PAN_BOUNDS,
-      Math.min(PAN_BOUNDS, panStart.current.originX + dx),
+      -bound,
+      Math.min(bound, panStart.current.originX + dx),
     );
     const newY = Math.max(
-      -PAN_BOUNDS,
-      Math.min(PAN_BOUNDS, panStart.current.originY + dy),
+      -bound,
+      Math.min(bound, panStart.current.originY + dy),
     );
     panState.current = { x: newX, y: newY };
     // Direct DOM — skip React reconciliation for 60fps
