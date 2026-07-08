@@ -90,8 +90,7 @@ export function LightSourceOverlay({ lightState, onChange }: Props) {
           style={{
             width: 20,
             height: 20,
-            background:
-              "radial-gradient(circle at 35% 35%, #ffee88, #ffcc33)",
+            background: "radial-gradient(circle at 35% 35%, #ffee88, #ffcc33)",
             boxShadow: "0 0 24px rgba(255,220,80,0.5)",
             position: "absolute",
             top: -10,
@@ -100,7 +99,7 @@ export function LightSourceOverlay({ lightState, onChange }: Props) {
         />
         {/* Angle badge */}
         <div
-          className="absolute rounded-md px-1.5 py-0.5 text-[10px] font-mono font-semibold whitespace-nowrap pointer-events-none"
+          className="absolute rounded-md px-1.5 py-0.5 text-xs font-mono font-semibold whitespace-nowrap pointer-events-none"
           style={{
             background: "rgba(0,0,0,0.7)",
             color: "#ffdd66",

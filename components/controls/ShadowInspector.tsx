@@ -40,9 +40,7 @@ export function ShadowInspector({ shadows }: Props) {
     }, 0);
 
     const avgOffset =
-      visible.length > 0
-        ? Math.round(totalOffset / visible.length)
-        : 0;
+      visible.length > 0 ? Math.round(totalOffset / visible.length) : 0;
 
     // Dominant color (average of visible shadow colors weighted by opacity)
     let rTotal = 0,
@@ -73,7 +71,10 @@ export function ShadowInspector({ shadows }: Props) {
     const dominantColor = `#${avgR.toString(16).padStart(2, "0")}${avgG.toString(16).padStart(2, "0")}${avgB.toString(16).padStart(2, "0")}`;
 
     // Depth score (0-100): based on avg blur + avg offset
-    const rawDepth = Math.min(100, Math.round((avgBlur * 0.4 + avgOffset * 0.6) * 1.5));
+    const rawDepth = Math.min(
+      100,
+      Math.round((avgBlur * 0.4 + avgOffset * 0.6) * 1.5),
+    );
     const depthScore = Math.min(100, rawDepth);
 
     // Luminance
@@ -130,7 +131,7 @@ export function ShadowInspector({ shadows }: Props) {
           </span>
         </div>
         <span
-          className="text-[10px] font-semibold px-1.5 py-0.5 rounded-md"
+          className="text-xs font-semibold px-1.5 py-0.5 rounded-md"
           style={{
             background:
               stats.depthScore > 60
@@ -149,7 +150,7 @@ export function ShadowInspector({ shadows }: Props) {
         {/* Layers */}
         <div className="flex items-center justify-between">
           <span
-            className="text-[10px] font-medium"
+            className="text-xs font-medium"
             style={{ color: "var(--text-faint)" }}
           >
             Layers
@@ -171,7 +172,7 @@ export function ShadowInspector({ shadows }: Props) {
         {/* CSS Length */}
         <div className="flex items-center justify-between">
           <span
-            className="text-[10px] font-medium"
+            className="text-xs font-medium"
             style={{ color: "var(--text-faint)" }}
           >
             CSS length
@@ -187,7 +188,7 @@ export function ShadowInspector({ shadows }: Props) {
         {/* Avg Opacity */}
         <div className="flex items-center justify-between">
           <span
-            className="text-[10px] font-medium"
+            className="text-xs font-medium"
             style={{ color: "var(--text-faint)" }}
           >
             Avg opacity
@@ -203,7 +204,7 @@ export function ShadowInspector({ shadows }: Props) {
         {/* Avg Blur */}
         <div className="flex items-center justify-between">
           <span
-            className="text-[10px] font-medium"
+            className="text-xs font-medium"
             style={{ color: "var(--text-faint)" }}
           >
             Avg blur
@@ -219,7 +220,7 @@ export function ShadowInspector({ shadows }: Props) {
         {/* Avg Offset */}
         <div className="flex items-center justify-between">
           <span
-            className="text-[10px] font-medium"
+            className="text-xs font-medium"
             style={{ color: "var(--text-faint)" }}
           >
             Avg offset
@@ -236,7 +237,7 @@ export function ShadowInspector({ shadows }: Props) {
         {stats.insetCount > 0 && (
           <div className="flex items-center justify-between">
             <span
-              className="text-[10px] font-medium"
+              className="text-xs font-medium"
               style={{ color: "var(--text-faint)" }}
             >
               Inset layers
@@ -273,7 +274,7 @@ export function ShadowInspector({ shadows }: Props) {
           {stats.dominantColor.toUpperCase()}
         </span>
         <span
-          className="text-[10px] ml-auto"
+          className="text-xs ml-auto"
           style={{ color: "var(--text-faint)" }}
         >
           {stats.contrastLevel === "light" ? "Light tone" : "Dark tone"}
@@ -284,13 +285,13 @@ export function ShadowInspector({ shadows }: Props) {
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between">
           <span
-            className="text-[10px] font-medium"
+            className="text-xs font-medium"
             style={{ color: "var(--text-faint)" }}
           >
             Depth
           </span>
           <span
-            className="text-[10px] font-mono font-semibold"
+            className="text-xs font-mono font-semibold"
             style={{ color: "var(--accent)" }}
           >
             {stats.depthScore}/100

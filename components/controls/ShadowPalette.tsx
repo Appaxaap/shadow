@@ -50,7 +50,7 @@ export function ShadowPalette({ seed, onSelect }: Props) {
           Shadow Palette
         </span>
         <span
-          className="text-[10px] font-medium"
+          className="text-xs font-medium"
           style={{ color: "var(--text-faint)" }}
         >
           {palette.length} variations
@@ -91,17 +91,20 @@ export function ShadowPalette({ seed, onSelect }: Props) {
                 />
               </div>
               {/* Label row */}
-              <div className="flex items-center gap-1 px-0.5">
-                <span className="text-[11px] leading-none">{entry.icon}</span>
+              <div className="flex items-center gap-1.5 px-0.5">
                 <span
-                  className="text-[11px] font-semibold leading-none truncate"
+                  className="w-2.5 h-2.5 rounded-full shrink-0"
+                  style={{ background: entry.dotColor }}
+                />
+                <span
+                  className="text-xs font-semibold leading-none truncate"
                   style={{ color: "var(--text)" }}
                 >
                   {entry.name}
                 </span>
               </div>
               <span
-                className="text-[9px] leading-none px-0.5"
+                className="text-[11px] leading-none px-0.5"
                 style={{ color: "var(--text-faint)" }}
               >
                 {entry.description}

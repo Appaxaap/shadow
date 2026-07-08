@@ -254,7 +254,7 @@ export function ShadowPreview({
                 <button
                   key={m.id}
                   onClick={() => onMaterialChange(m.id)}
-                  className="px-2 py-1.5 text-[11px] font-semibold rounded-xl transition-all"
+                  className="px-2 py-1.5 text-xs font-semibold rounded-xl transition-all"
                   style={{
                     background: active
                       ? "var(--surface-raised)"
@@ -266,7 +266,16 @@ export function ShadowPreview({
                   }}
                   title={m.description}
                 >
-                  {m.icon} {m.name}
+                  <span
+                    className="w-[22px] h-[22px] rounded-lg flex items-center justify-center text-xs font-bold uppercase shrink-0"
+                    style={{
+                      background: active ? "var(--accent)" : "var(--surface)",
+                      color: active ? "var(--bg)" : "var(--text-muted)",
+                    }}
+                  >
+                    {m.badge}
+                  </span>
+                  <span>{m.name}</span>
                 </button>
               );
             })}
@@ -293,7 +302,7 @@ export function ShadowPreview({
                 <button
                   key={st.value}
                   onClick={() => setInteractionState(st.value)}
-                  className="px-2.5 py-1.5 text-[10px] font-semibold rounded-xl transition-all active:scale-95"
+                  className="px-2.5 py-1.5 text-xs font-semibold rounded-xl transition-all active:scale-95"
                   style={{
                     background: active
                       ? "var(--surface-raised)"
@@ -392,7 +401,7 @@ export function ShadowPreview({
             {/* Split view toggle */}
             <button
               onClick={() => setSplitView(!splitView)}
-              className="pointer-events-auto shrink-0 px-2.5 py-1.5 text-[10px] font-semibold rounded-xl transition-all active:scale-95"
+              className="pointer-events-auto shrink-0 px-2.5 py-1.5 text-xs font-semibold rounded-xl transition-all active:scale-95"
               style={{
                 background: splitView
                   ? "color-mix(in srgb, var(--accent) 12%, transparent)"
@@ -406,7 +415,7 @@ export function ShadowPreview({
               }}
               title="Compare shadow on dark + light backgrounds"
             >
-              {splitView ? "☀🌙 Split" : "☀🌙"}
+              {splitView ? "Split on" : "Side by side"}
             </button>
           </div>
         )}
@@ -436,13 +445,13 @@ export function ShadowPreview({
           />
           {/* Labels */}
           <span
-            className="absolute top-2 left-3 text-[9px] font-semibold uppercase tracking-wider"
+            className="absolute top-2 left-3 text-[11px] font-semibold uppercase tracking-wider"
             style={{ color: "rgba(255,255,255,0.35)" }}
           >
             Dark
           </span>
           <span
-            className="absolute top-2 right-3 text-[9px] font-semibold uppercase tracking-wider"
+            className="absolute top-2 right-3 text-[11px] font-semibold uppercase tracking-wider"
             style={{ color: "rgba(0,0,0,0.25)" }}
           >
             Light
@@ -638,7 +647,7 @@ export function ShadowPreview({
           }}
         >
           <span
-            className="text-[9px] font-semibold px-1.5"
+            className="text-[11px] font-semibold px-1.5"
             style={{ color: "var(--text-faint)" }}
           >
             Rotate
@@ -654,7 +663,7 @@ export function ShadowPreview({
               <button
                 key={r.value}
                 onClick={() => setElementRotation(r.value)}
-                className="px-2 py-1 text-[10px] font-semibold rounded-lg transition-all active:scale-95"
+                className="px-2 py-1 text-xs font-semibold rounded-lg transition-all active:scale-95"
                 style={{
                   background: active ? "var(--surface-raised)" : "transparent",
                   color: active ? "var(--text)" : "var(--text-muted)",
@@ -691,7 +700,7 @@ export function ShadowPreview({
               <button
                 key={preset.label}
                 onClick={() => setElementSize(preset.value)}
-                className="px-2.5 py-1 text-[10px] font-semibold rounded-lg transition-all active:scale-95"
+                className="px-2.5 py-1 text-xs font-semibold rounded-lg transition-all active:scale-95"
                 style={{
                   background: active ? "var(--surface-raised)" : "transparent",
                   color: active ? "var(--text)" : "var(--text-muted)",
@@ -719,7 +728,7 @@ export function ShadowPreview({
               }}
             />
             <span
-              className="text-[10px] font-mono font-medium min-w-[32px] text-right"
+              className="text-xs font-mono font-medium min-w-[32px] text-right"
               style={{ color: "var(--accent)" }}
             >
               {elementSize}px

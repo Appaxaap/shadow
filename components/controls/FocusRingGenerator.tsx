@@ -84,7 +84,7 @@ export function FocusRingGenerator({ activeShadow }: Props) {
           {/* Preview toggle */}
           <button
             onClick={() => setShowPreview(!showPreview)}
-            className="px-2 py-1 text-[10px] font-semibold rounded-md transition-all active:scale-95"
+            className="px-2 py-1 text-xs font-semibold rounded-md transition-all active:scale-95"
             style={{
               background: showPreview
                 ? "color-mix(in srgb, var(--accent) 12%, transparent)"
@@ -103,7 +103,7 @@ export function FocusRingGenerator({ activeShadow }: Props) {
           {/* Copy */}
           <button
             onClick={handleCopy}
-            className="flex items-center gap-1 px-2 py-1 text-[10px] font-semibold rounded-md transition-all active:scale-95"
+            className="flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-md transition-all active:scale-95"
             style={{
               background: copied
                 ? "color-mix(in srgb, var(--accent) 15%, transparent)"

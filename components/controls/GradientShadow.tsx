@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import { Layers } from "lucide-react";
 import * as Slider from "@radix-ui/react-slider";
 import type { Shadow } from "../../lib/types";
 import {
@@ -19,12 +20,9 @@ export function GradientShadow({ onApply }: Props) {
     DEFAULT_GRADIENT_PARAMS,
   );
 
-  const update = useCallback(
-    (patch: Partial<GradientShadowParams>) => {
-      setParams((p) => ({ ...p, ...patch }));
-    },
-    [],
-  );
+  const update = useCallback((patch: Partial<GradientShadowParams>) => {
+    setParams((p) => ({ ...p, ...patch }));
+  }, []);
 
   const handleGenerate = useCallback(() => {
     const shadows = generateGradientShadow(params);
@@ -56,11 +54,11 @@ export function GradientShadow({ onApply }: Props) {
         style={{ color: "var(--text-muted)" }}
       >
         <div className="flex items-center gap-2">
-          <span className="text-[13px]">🌈</span>
+          <Layers size={14} />
           <span>Gradient Shadow</span>
         </div>
         <span
-          className="text-[10px] transition-transform"
+          className="text-xs transition-transform"
           style={{
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
             display: "inline-block",
@@ -90,13 +88,13 @@ export function GradientShadow({ onApply }: Props) {
           <div className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
               <label
-                className="text-[10px] font-medium"
+                className="text-xs font-medium"
                 style={{ color: "var(--text-faint)" }}
               >
                 Depth
               </label>
               <span
-                className="text-[10px] font-mono"
+                className="text-xs font-mono"
                 style={{ color: "var(--accent)" }}
               >
                 {params.depth}%
@@ -135,13 +133,13 @@ export function GradientShadow({ onApply }: Props) {
           <div className="flex flex-col gap-1">
             <div className="flex justify-between items-center">
               <label
-                className="text-[10px] font-medium"
+                className="text-xs font-medium"
                 style={{ color: "var(--text-faint)" }}
               >
                 Falloff
               </label>
               <span
-                className="text-[10px] font-mono"
+                className="text-xs font-mono"
                 style={{ color: "var(--accent)" }}
               >
                 {params.falloff.toFixed(1)}x
@@ -180,13 +178,13 @@ export function GradientShadow({ onApply }: Props) {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
               <label
-                className="text-[10px] font-medium"
+                className="text-xs font-medium"
                 style={{ color: "var(--text-faint)" }}
               >
                 Layers
               </label>
               <span
-                className="text-[10px] font-mono font-semibold"
+                className="text-xs font-mono font-semibold"
                 style={{ color: "var(--accent)" }}
               >
                 {params.layers}
@@ -196,9 +194,7 @@ export function GradientShadow({ onApply }: Props) {
                 min={2}
                 max={12}
                 value={params.layers}
-                onChange={(e) =>
-                  update({ layers: Number(e.target.value) })
-                }
+                onChange={(e) => update({ layers: Number(e.target.value) })}
                 className="w-12 h-1 rounded-full appearance-none cursor-pointer"
                 style={{
                   background: "var(--surface-raised)",
@@ -208,7 +204,7 @@ export function GradientShadow({ onApply }: Props) {
             </div>
             <div className="flex items-center gap-1.5 ml-auto">
               <label
-                className="text-[10px] font-medium"
+                className="text-xs font-medium"
                 style={{ color: "var(--text-faint)" }}
               >
                 Color

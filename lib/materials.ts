@@ -12,7 +12,8 @@
 export type Material = {
   id: string;
   name: string;
-  icon: string;
+  /** Short abbreviation displayed as a badge in the toolbar */
+  badge: string;
   /** Background color of the element (the surface the shadow falls on) */
   elementBg: string;
   /** Lightness multiplier applied to the shadow color (0=fully absorbed, 2=fully reflected) */
@@ -29,7 +30,7 @@ export const MATERIALS: Material[] = [
   {
     id: "paper",
     name: "Paper",
-    icon: "📄",
+    badge: "Pa",
     elementBg: "#F5F0E8",
     shadowLightness: 1.0,
     shadowOpacity: 1.0,
@@ -38,7 +39,7 @@ export const MATERIALS: Material[] = [
   {
     id: "glass",
     name: "Glass",
-    icon: "🪟",
+    badge: "Gl",
     elementBg: "rgba(255,255,255,0.3)",
     shadowLightness: 0.6,
     shadowOpacity: 0.5,
@@ -49,7 +50,7 @@ export const MATERIALS: Material[] = [
   {
     id: "metal",
     name: "Metal",
-    icon: "⚙️",
+    badge: "Me",
     elementBg: "#A0AAB5",
     shadowLightness: 1.3,
     shadowOpacity: 1.2,
@@ -60,7 +61,7 @@ export const MATERIALS: Material[] = [
   {
     id: "frosted",
     name: "Frosted",
-    icon: "🧊",
+    badge: "Fr",
     elementBg: "rgba(255,255,255,0.15)",
     shadowLightness: 0.7,
     shadowOpacity: 0.6,
@@ -71,7 +72,7 @@ export const MATERIALS: Material[] = [
   {
     id: "fabric",
     name: "Fabric",
-    icon: "🧵",
+    badge: "Fa",
     elementBg: "#D4CFC4",
     shadowLightness: 0.85,
     shadowOpacity: 1.1,
@@ -80,7 +81,7 @@ export const MATERIALS: Material[] = [
   {
     id: "plastic",
     name: "Plastic",
-    icon: "🧩",
+    badge: "Pl",
     elementBg: "#E8E0D8",
     shadowLightness: 1.1,
     shadowOpacity: 0.9,
@@ -101,10 +102,7 @@ export function getMaterial(id: string): Material {
  * Apply a material's shadow modifiers to an rgba color string.
  * Lightens or darkens the shadow based on surface reflectivity.
  */
-export function applyMaterialToColor(
-  rgba: string,
-  material: Material,
-): string {
+export function applyMaterialToColor(rgba: string, material: Material): string {
   // Extract r,g,b from rgba(r,g,b,a)
   const match = rgba.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*([\d.]+)\)/);
   if (!match) return rgba;

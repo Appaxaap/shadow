@@ -16,12 +16,18 @@ import { genId } from "./shadowUtils";
 
 export type PaletteEntry = {
   name: string;
-  icon: string;
+  /** Color dot hex value derived from the shadow */
+  dotColor: string;
   description: string;
   shadow: Shadow;
 };
 
-function shiftHex(hex: string, rShift: number, gShift: number, bShift: number): string {
+function shiftHex(
+  hex: string,
+  rShift: number,
+  gShift: number,
+  bShift: number,
+): string {
   const clean = hex.replace("#", "");
   const full =
     clean.length === 3
@@ -52,7 +58,7 @@ export function generatePalette(seed: Shadow): PaletteEntry[] {
   return [
     {
       name: "Subtle",
-      icon: "🕊️",
+      dotColor: shiftHex(color, 30, 30, 30),
       description: "Soft and gentle",
       shadow: cloneShadow(seed, {
         x: Math.round(x * 0.3),
@@ -64,7 +70,7 @@ export function generatePalette(seed: Shadow): PaletteEntry[] {
     },
     {
       name: "Bold",
-      icon: "💪",
+      dotColor: shiftHex(color, -20, -20, -20),
       description: "Strong and deep",
       shadow: cloneShadow(seed, {
         x: Math.round(x * 1.5),
@@ -77,7 +83,7 @@ export function generatePalette(seed: Shadow): PaletteEntry[] {
     },
     {
       name: "Ethereal",
-      icon: "☁️",
+      dotColor: shiftHex(color, 40, 40, 50),
       description: "Wide and floating",
       shadow: cloneShadow(seed, {
         x: Math.round(x * 0.6),
@@ -89,7 +95,7 @@ export function generatePalette(seed: Shadow): PaletteEntry[] {
     },
     {
       name: "Sharp",
-      icon: "⚡",
+      dotColor: shiftHex(color, -5, -5, -5),
       description: "Tight and precise",
       shadow: cloneShadow(seed, {
         x,
@@ -101,7 +107,7 @@ export function generatePalette(seed: Shadow): PaletteEntry[] {
     },
     {
       name: "Warm",
-      icon: "🌅",
+      dotColor: shiftHex(color, 25, 5, -15),
       description: "Amber-toned glow",
       shadow: cloneShadow(seed, {
         color: shiftHex(color, 25, 5, -15),
@@ -110,7 +116,7 @@ export function generatePalette(seed: Shadow): PaletteEntry[] {
     },
     {
       name: "Cool",
-      icon: "❄️",
+      dotColor: shiftHex(color, -15, 5, 25),
       description: "Blue-toned depth",
       shadow: cloneShadow(seed, {
         color: shiftHex(color, -15, 5, 25),

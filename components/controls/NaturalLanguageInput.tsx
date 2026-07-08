@@ -26,7 +26,7 @@ export function NaturalLanguageInput({ onApply }: Props) {
     (text: string) => {
       const trimmed = text.trim();
       if (!trimmed || trimmed.length < 3) {
-        setError("Type a description like \"soft shadow to the right\"");
+        setError('Type a description like "soft shadow to the right"');
         return;
       }
       const result = parseNaturalLanguage(trimmed);
@@ -73,7 +73,7 @@ export function NaturalLanguageInput({ onApply }: Props) {
           <span>Describe your shadow</span>
         </div>
         <span
-          className="text-[10px] transition-transform"
+          className="text-xs transition-transform"
           style={{
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
             display: "inline-block",
@@ -146,7 +146,7 @@ export function NaturalLanguageInput({ onApply }: Props) {
           {/* Examples */}
           <div className="flex flex-col gap-1.5">
             <span
-              className="text-[10px] font-medium"
+              className="text-xs font-medium"
               style={{ color: "var(--text-faint)" }}
             >
               Try saying:
@@ -159,7 +159,7 @@ export function NaturalLanguageInput({ onApply }: Props) {
                     setInput(ex);
                     handleParse(ex);
                   }}
-                  className="px-2.5 py-1 text-[10px] font-medium rounded-lg transition-all whitespace-nowrap"
+                  className="px-2.5 py-1 text-xs font-medium rounded-lg transition-all whitespace-nowrap"
                   style={{
                     background: "var(--surface-raised)",
                     color: "var(--text-muted)",

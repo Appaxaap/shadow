@@ -150,7 +150,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
           <span>Shadow Morph</span>
         </div>
         <span
-          className="text-[10px] transition-transform"
+          className="text-xs transition-transform"
           style={{
             transform: open ? "rotate(180deg)" : "rotate(0deg)",
             display: "inline-block",
@@ -183,7 +183,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
                 />
               </div>
               <span
-                className="text-[9px] font-medium"
+                className="text-[11px] font-medium"
                 style={{ color: "var(--text-faint)" }}
               >
                 A (current)
@@ -212,7 +212,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
                 />
               </div>
               <span
-                className="text-[9px] font-medium"
+                className="text-[11px] font-medium"
                 style={{ color: "var(--accent)" }}
               >
                 B (target)
@@ -226,7 +226,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
             <div className="flex gap-2">
               <div className="flex-1">
                 <label
-                  className="text-[9px] font-medium"
+                  className="text-[11px] font-medium"
                   style={{ color: "var(--text-faint)" }}
                 >
                   X
@@ -248,7 +248,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
               </div>
               <div className="flex-1">
                 <label
-                  className="text-[9px] font-medium"
+                  className="text-[11px] font-medium"
                   style={{ color: "var(--text-faint)" }}
                 >
                   Y
@@ -274,7 +274,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
             <div className="flex gap-2">
               <div className="flex-1">
                 <label
-                  className="text-[9px] font-medium"
+                  className="text-[11px] font-medium"
                   style={{ color: "var(--text-faint)" }}
                 >
                   Blur
@@ -299,7 +299,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
               </div>
               <div className="flex-1">
                 <label
-                  className="text-[9px] font-medium"
+                  className="text-[11px] font-medium"
                   style={{ color: "var(--text-faint)" }}
                 >
                   Opacity
@@ -355,7 +355,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
                   onApply(stateARef.current);
                   setAtB(false);
                 }}
-                className="flex items-center gap-1 px-2 py-1.5 text-[11px] font-semibold rounded-xl transition-all active:scale-95"
+                className="flex items-center gap-1 px-2 py-1.5 text-xs font-semibold rounded-xl transition-all active:scale-95"
                 style={{
                   background: "rgba(128,128,128,0.08)",
                   color: "var(--text-muted)",
@@ -368,7 +368,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
 
             <div className="flex items-center gap-1.5 ml-auto">
               <label
-                className="text-[10px] font-medium"
+                className="text-xs font-medium"
                 style={{ color: "var(--text-faint)" }}
               >
                 {duration.toFixed(1)}s
@@ -399,7 +399,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
           >
             <button
               onClick={() => setCodeMode("transition")}
-              className="flex-1 px-2 py-1 text-[10px] font-semibold rounded-lg transition-all active:scale-95"
+              className="flex-1 px-2 py-1 text-xs font-semibold rounded-lg transition-all active:scale-95"
               style={{
                 background:
                   codeMode === "transition" ? "var(--surface)" : "transparent",
@@ -417,7 +417,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
             </button>
             <button
               onClick={() => setCodeMode("keyframes")}
-              className="flex-1 px-2 py-1 text-[10px] font-semibold rounded-lg transition-all active:scale-95"
+              className="flex-1 px-2 py-1 text-xs font-semibold rounded-lg transition-all active:scale-95"
               style={{
                 background:
                   codeMode === "keyframes" ? "var(--surface)" : "transparent",
@@ -440,7 +440,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1.5">
                 <label
-                  className="text-[10px] font-medium"
+                  className="text-xs font-medium"
                   style={{ color: "var(--text-faint)" }}
                 >
                   Loop
@@ -448,7 +448,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
                 <select
                   value={animationIterations}
                   onChange={(e) => setAnimationIterations(e.target.value)}
-                  className="text-[10px] font-mono rounded-lg px-2 py-1 outline-none"
+                  className="text-xs font-mono rounded-lg px-2 py-1 outline-none"
                   style={{
                     background: "var(--surface-raised)",
                     border: "1px solid var(--border)",
@@ -464,7 +464,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
               </div>
               <div className="flex items-center gap-1.5">
                 <label
-                  className="text-[10px] font-medium"
+                  className="text-xs font-medium"
                   style={{ color: "var(--text-faint)" }}
                 >
                   Easing
@@ -472,7 +472,7 @@ export function ShadowMorph({ shadows, onApply }: Props) {
                 <select
                   value={animationEasing}
                   onChange={(e) => setAnimationEasing(e.target.value)}
-                  className="text-[10px] font-mono rounded-lg px-2 py-1 outline-none max-w-[120px]"
+                  className="text-xs font-mono rounded-lg px-2 py-1 outline-none max-w-[120px]"
                   style={{
                     background: "var(--surface-raised)",
                     border: "1px solid var(--border)",

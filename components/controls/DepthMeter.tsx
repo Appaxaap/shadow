@@ -16,14 +16,11 @@ export function DepthMeter({ onApply }: Props) {
     generateDepthShadows(0.3, "#000000"),
   );
 
-  const update = useCallback(
-    (newDepth: number, newColor: string) => {
-      setDepth(newDepth);
-      setColor(newColor);
-      setPreview(generateDepthShadows(newDepth / 100, newColor));
-    },
-    [],
-  );
+  const update = useCallback((newDepth: number, newColor: string) => {
+    setDepth(newDepth);
+    setColor(newColor);
+    setPreview(generateDepthShadows(newDepth / 100, newColor));
+  }, []);
 
   const handleApply = useCallback(() => {
     const shadows = generateDepthShadows(depth / 100, color);
@@ -50,11 +47,12 @@ export function DepthMeter({ onApply }: Props) {
           Depth Meter
         </span>
         <span
-          className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md"
+          className="text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md"
           style={{
             background: "color-mix(in srgb, var(--accent) 12%, transparent)",
             color: "var(--accent)",
-            border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
+            border:
+              "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
           }}
         >
           {label}
@@ -65,7 +63,7 @@ export function DepthMeter({ onApply }: Props) {
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
           <label
-            className="text-[11px] font-medium"
+            className="text-xs font-medium"
             style={{ color: "var(--text-faint)" }}
           >
             Distance from surface
@@ -110,7 +108,7 @@ export function DepthMeter({ onApply }: Props) {
 
         {/* Depth markers */}
         <div
-          className="flex justify-between text-[9px] font-mono"
+          className="flex justify-between text-[11px] font-mono"
           style={{ color: "var(--text-faint)", padding: "0 2px" }}
         >
           <span>Flat</span>
@@ -123,7 +121,7 @@ export function DepthMeter({ onApply }: Props) {
       {/* Color picker row */}
       <div className="flex items-center gap-3">
         <label
-          className="text-[11px] font-medium shrink-0"
+          className="text-xs font-medium shrink-0"
           style={{ color: "var(--text-faint)" }}
         >
           Shadow color

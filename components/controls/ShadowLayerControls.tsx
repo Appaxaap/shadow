@@ -199,7 +199,7 @@ function AngleDistanceControl({
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline justify-between gap-2 mb-1">
             <span
-              className="text-[11px] font-semibold"
+              className="text-xs font-semibold"
               style={{ color: "var(--text-muted)" }}
             >
               Angle
@@ -213,7 +213,7 @@ function AngleDistanceControl({
           </div>
           <div className="flex items-baseline justify-between gap-2">
             <span
-              className="text-[11px] font-semibold"
+              className="text-xs font-semibold"
               style={{ color: "var(--text-muted)" }}
             >
               Distance
