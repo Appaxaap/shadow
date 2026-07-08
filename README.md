@@ -374,6 +374,43 @@ The `getFormatCode()` dispatch function selects the appropriate generator based 
 
 ---
 
+## Mobile Responsiveness
+
+Layerbox uses a responsive layout that adapts to the viewport width, with a breakpoint at 1024px.
+
+### Desktop (1024px and above)
+
+- Three floating panels overlaid on the canvas:
+  - **Left panel** (270px): Layer list + per-layer controls
+  - **Right panel** (270px): Tools (inspector, NL input, morph, depth, gradient, DNA, focus ring, palette)
+  - **Bottom panel**: Code output with format switching (CSS, Tailwind, SCSS, JS, Flutter)
+- Canvas is fully interactive with drag-to-pan, double-click to reset
+- All toolbar overlays (material, shape, interaction state, background selector, size/rotation) are centered horizontally above the canvas
+- Panel toggle button in the header hides all panels for a distraction-free full-canvas view
+
+### Mobile (below 1024px)
+
+- Side panels are replaced with a bottom tab bar containing four tabs:
+  - **Layers**: Layer list with drag-to-reorder, visibility toggle, duplicate, delete
+  - **Controls**: Per-layer property editors (angle/distance, blur, spread, opacity, color, inset)
+  - **Tools**: Full right-panel tool suite in a scrollable sheet
+  - **Code**: Syntax-highlighted code output with format switching and copy
+- Each tab opens a slide-up bottom sheet overlay (max 55vh) above the tab bar
+- Tap the active tab again or the close button to dismiss the sheet
+- The tab bar stays visible while a panel is open
+- Header buttons are compacted (smaller icons, no tab switcher)
+- All floating canvas toolbars are horizontally scrollable with hidden scrollbar
+- Presets and Scale pages are accessible via quick-access buttons next to the tab bar
+- The page uses `100dvh` (dynamic viewport height) and `overflow: hidden` to prevent browser chrome scroll flicker
+
+### Implementation
+
+- Desktop/mobile detection in `app/page.tsx` via a `useMobile()` hook that checks `window.innerWidth`
+- CSS: `overflow: hidden` and `overscroll-behavior: none` on `html/body` to lock the viewport
+- Canvas toolbars in `ShadowPreview.tsx` use `overflow-x: auto` with `scrollbar-width: none` for horizontal scrolling
+
+---
+
 ## Development Guide
 
 ### Prerequisites
