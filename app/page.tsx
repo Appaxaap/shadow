@@ -231,9 +231,9 @@ export default function Home() {
               )}
             </div>
 
-            {/* ─── Panel C: Properties / Tools (center-right) ─── */}
+            {/* ─── Panel C: Properties / Tools (right) ─── */}
             <div
-              className="absolute right-[376px] top-3 bottom-3 w-[270px] z-10 animate-fade-up overflow-y-auto pointer-events-auto"
+              className="absolute right-3 top-3 bottom-3 w-[270px] z-10 animate-fade-up overflow-y-auto pointer-events-auto"
               style={{
                 scrollbarWidth: "thin",
                 scrollbarColor: "rgba(255,255,255,0.08) transparent",
@@ -278,9 +278,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* ─── Layout 3: Code output (right) ─── */}
+            {/* ─── Panel D: Code output (bottom, between left & right panels) ─── */}
             <div
-              className="absolute right-3 top-3 bottom-3 w-[360px] z-10 animate-fade-up rounded-2xl overflow-hidden pointer-events-auto"
+              className="absolute bottom-3 left-[285px] right-[285px] h-[220px] z-10 animate-fade-up rounded-2xl overflow-hidden pointer-events-auto"
               style={{
                 filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
               }}
