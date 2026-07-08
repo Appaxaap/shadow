@@ -231,11 +231,12 @@ export default function Home() {
               )}
             </div>
 
-            {/* ─── Layout 2: Tools (bottom center) ─── */}
+            {/* ─── Panel C: Properties / Tools (center-right) ─── */}
             <div
-              className="absolute bottom-3 left-[285px] right-[376px] z-10 animate-fade-up pointer-events-auto overflow-y-auto"
+              className="absolute right-[376px] top-3 bottom-3 w-[270px] z-10 animate-fade-up overflow-y-auto pointer-events-auto"
               style={{
-                maxHeight: "calc(100vh - 200px)",
+                scrollbarWidth: "thin",
+                scrollbarColor: "rgba(255,255,255,0.08) transparent",
               }}
             >
               <div className="flex flex-col gap-2">
