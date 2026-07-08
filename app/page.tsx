@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  ArrowLeft,
   Layers,
   Lightbulb,
   Moon,
@@ -155,6 +156,21 @@ export default function Home() {
         }}
       >
         <div className="flex items-center gap-2 flex-1 min-w-0">
+          {/* Back button - mobile only, when on presets/scale */}
+          {isMobile && tab !== "editor" && (
+            <button
+              onClick={() => setTab("editor")}
+              className="w-7 h-7 flex items-center justify-center rounded-xl shrink-0 transition-all duration-150 active:scale-90"
+              style={{
+                background: "rgba(128,128,128,0.08)",
+                border: "1px solid var(--border)",
+                color: "var(--text-muted)",
+              }}
+              aria-label="Back to editor"
+            >
+              <ArrowLeft size={14} />
+            </button>
+          )}
           <div
             className="w-6 h-6 rounded-xl flex items-center justify-center shrink-0"
             style={{ background: "var(--accent)" }}
@@ -506,34 +522,42 @@ export default function Home() {
 
               {/* Presets & Scale quick buttons */}
               <div className="flex flex-col gap-0.5 items-center py-2 px-1">
-                <button
-                  onClick={() => setTab("presets")}
-                  className="text-[10px] font-semibold px-2 py-1 rounded-lg"
-                  style={{
-                    background:
-                      tab === "presets"
-                        ? "color-mix(in srgb, var(--accent) 12%, transparent)"
-                        : "transparent",
-                    color:
-                      tab === "presets" ? "var(--accent)" : "var(--text-muted)",
-                  }}
-                >
-                  Presets
-                </button>
-                <button
-                  onClick={() => setTab("scale")}
-                  className="text-[10px] font-semibold px-2 py-1 rounded-lg"
-                  style={{
-                    background:
-                      tab === "scale"
-                        ? "color-mix(in srgb, var(--accent) 12%, transparent)"
-                        : "transparent",
-                    color:
-                      tab === "scale" ? "var(--accent)" : "var(--text-muted)",
-                  }}
-                >
-                  Scale
-                </button>
+                {tab !== "editor" ? (
+                  <button
+                    onClick={() => setTab("editor")}
+                    className="text-[10px] font-semibold px-2 py-1 rounded-lg"
+                    style={{
+                      background:
+                        "color-mix(in srgb, var(--accent) 12%, transparent)",
+                      color: "var(--accent)",
+                    }}
+                  >
+                    Editor
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setTab("presets")}
+                      className="text-[10px] font-semibold px-2 py-1 rounded-lg"
+                      style={{
+                        background: "transparent",
+                        color: "var(--text-muted)",
+                      }}
+                    >
+                      Presets
+                    </button>
+                    <button
+                      onClick={() => setTab("scale")}
+                      className="text-[10px] font-semibold px-2 py-1 rounded-lg"
+                      style={{
+                        background: "transparent",
+                        color: "var(--text-muted)",
+                      }}
+                    >
+                      Scale
+                    </button>
+                  </>
+                )}
               </div>
             </div>
 

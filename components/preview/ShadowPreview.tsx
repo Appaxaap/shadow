@@ -234,7 +234,7 @@ export function ShadowPreview({
       }}
     >
       {/* Floating material + shape selector - centered top overlay (fixed) */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex flex-col gap-1.5 items-center pointer-events-none max-w-[95vw] sm:max-w-none">
+      <div className="absolute top-3 md:top-3 left-1/2 -translate-x-1/2 z-20 flex flex-col gap-2.5 md:gap-1.5 items-center pointer-events-none max-w-[95vw] sm:max-w-none">
         {/* Material selector */}
         {onMaterialChange && (
           <div
@@ -286,7 +286,7 @@ export function ShadowPreview({
 
         {/* Interaction state toggles + Shape row */}
         <div
-          className="flex items-center gap-2 max-w-full overflow-x-auto"
+          className="flex items-center gap-2.5 max-w-full overflow-x-auto"
           style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
         >
           {/* Interaction states */}
@@ -363,7 +363,7 @@ export function ShadowPreview({
         {/* Background selector + Split view toggle */}
         {onBgChange && (
           <div
-            className="flex items-center gap-2 max-w-full overflow-x-auto"
+            className="flex items-center gap-2.5 max-w-full overflow-x-auto"
             style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
           >
             <div
@@ -387,7 +387,7 @@ export function ShadowPreview({
                   <button
                     key={b.id}
                     onClick={() => onBgChange(b.id)}
-                    className="shrink-0 w-6 h-6 rounded-lg transition-all duration-150 active:scale-90"
+                    className="shrink-0 w-7 h-7 md:w-6 md:h-6 rounded-lg transition-all duration-150 active:scale-90"
                     style={{
                       background: b.css,
                       border: active
@@ -642,10 +642,10 @@ export function ShadowPreview({
       </div>
 
       {/* Element size + rotation controls - bottom center */}
-      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-30 animate-fade-up max-w-[95vw]">
+      <div className="absolute bottom-20 md:bottom-16 left-1/2 -translate-x-1/2 z-30 animate-fade-up max-w-[95vw]">
         {/* Rotation buttons */}
         <div
-          className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl mb-1.5 mx-auto w-fit overflow-x-auto"
+          className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl mb-2 mx-auto w-fit overflow-x-auto"
           style={{
             background: isLight
               ? "rgba(255,255,255,0.75)"
@@ -750,7 +750,7 @@ export function ShadowPreview({
 
       {/* State CSS tooltip (bottom of canvas) */}
       {interactionState !== "normal" && (
-        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30 animate-fade-up">
+        <div className="absolute bottom-28 md:bottom-20 left-1/2 -translate-x-1/2 z-30 animate-fade-up">
           <div
             className="rounded-xl px-4 py-2 text-[10px] font-mono leading-relaxed whitespace-pre select-all"
             style={{
