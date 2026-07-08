@@ -169,7 +169,7 @@ export default function Home() {
             </div>
 
             {/* ─── Left column: layers + controls (stacked, no overlap) ─── */}
-            <div className="absolute left-3 top-3 bottom-[195px] w-[270px] flex flex-col gap-2 z-10 pointer-events-none">
+            <div className="absolute left-3 top-3 bottom-[235px] w-[270px] flex flex-col gap-2 z-10 pointer-events-none">
               {/* Layers panel */}
               <div
                 className="shrink-0 pointer-events-auto animate-fade-up rounded-2xl p-3"
@@ -232,7 +232,7 @@ export default function Home() {
             </div>
 
             {/* ─── Right column: tools stack (scrollable) ─── */}
-            <div className="absolute right-3 top-3 bottom-[195px] w-[300px] z-10">
+            <div className="absolute right-3 top-3 bottom-[235px] w-[300px] z-10">
               <div
                 className="h-full overflow-y-auto flex flex-col gap-2 pr-0.5 pointer-events-auto"
                 style={{
@@ -291,7 +291,7 @@ export default function Home() {
 
             {/* ─── Bottom bar: code output ─── */}
             <div
-              className="absolute bottom-3 left-3 right-3 h-[180px] z-10 animate-fade-up"
+              className="absolute bottom-3 left-3 right-3 h-[220px] z-10 animate-fade-up"
               style={{
                 filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
               }}
