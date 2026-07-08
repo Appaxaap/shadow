@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { PreviewShape, Shadow } from "../../lib/types";
 import { shadowsToCssValue } from "../../lib/shadowUtils";
 import type { LightState } from "../../lib/lightSource";
@@ -28,6 +28,8 @@ const SHAPES: { label: string; value: PreviewShape }[] = [
   { label: "Card", value: "card" },
 ];
 
+const PAN_BOUNDS = 320;
+
 export function ShadowPreview({
   shadows,
   isLight,
@@ -37,6 +39,51 @@ export function ShadowPreview({
   onMaterialChange,
 }: Props) {
   const [shape, setShape] = useState<PreviewShape>("box");
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const panState = useRef({ x: 0, y: 0 });
+  const isPanning = useRef(false);
+  const panStart = useRef({ clientX: 0, clientY: 0, originX: 0, originY: 0 });
+
+  const handlePanStart = useCallback((e: React.PointerEvent) => {
+    isPanning.current = true;
+    const target = e.currentTarget as HTMLElement;
+    target.setPointerCapture(e.pointerId);
+    panStart.current = {
+      clientX: e.clientX,
+      clientY: e.clientY,
+      originX: panState.current.x,
+      originY: panState.current.y,
+    };
+  }, []);
+
+  const handlePanMove = useCallback((e: React.PointerEvent) => {
+    if (!isPanning.current) return;
+    const dx = e.clientX - panStart.current.clientX;
+    const dy = e.clientY - panStart.current.clientY;
+    const newX = Math.max(
+      -PAN_BOUNDS,
+      Math.min(PAN_BOUNDS, panStart.current.originX + dx),
+    );
+    const newY = Math.max(
+      -PAN_BOUNDS,
+      Math.min(PAN_BOUNDS, panStart.current.originY + dy),
+    );
+    panState.current = { x: newX, y: newY };
+    setPan({ x: newX, y: newY });
+  }, []);
+
+  const handlePanEnd = useCallback((e: React.PointerEvent) => {
+    if (!isPanning.current) return;
+    isPanning.current = false;
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {}
+  }, []);
+
+  const handleDoubleClick = useCallback(() => {
+    setPan({ x: 0, y: 0 });
+    panState.current = { x: 0, y: 0 };
+  }, []);
 
   const material = getMaterial(materialId);
 
@@ -90,19 +137,19 @@ export function ShadowPreview({
 
   return (
     <div
-      className="relative w-full h-full"
+      className="relative w-full h-full overflow-hidden"
       style={{
         background: canvasBg,
         transition: "background 0.2s ease",
         ...dotGrid,
       }}
     >
-      {/* Floating material + shape selector - centered top overlay */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-10 flex flex-col gap-1.5 items-center">
+      {/* Floating material + shape selector - centered top overlay (fixed) */}
+      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex flex-col gap-1.5 items-center pointer-events-none">
         {/* Material selector */}
         {onMaterialChange && (
           <div
-            className="flex items-center gap-0.5 p-0.5 rounded-xl"
+            className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl"
             style={{
               background: isLight
                 ? "rgba(255,255,255,0.75)"
@@ -139,7 +186,7 @@ export function ShadowPreview({
 
         {/* Shape selector */}
         <div
-          className="flex items-center gap-0.5 p-0.5 rounded-xl mx-auto"
+          className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl mx-auto"
           style={{
             background: isLight
               ? "rgba(255,255,255,0.75)"
@@ -171,132 +218,152 @@ export function ShadowPreview({
         </div>
       </div>
 
-      {/* Light source overlay */}
-      {lightState && onLightChange && (
-        <LightSourceOverlay lightState={lightState} onChange={onLightChange} />
-      )}
-
-      {/* Centered preview element */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      {/* Draggable canvas surface */}
+      <div
+        className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing select-none touch-none"
+        style={{ touchAction: "none" }}
+        onPointerDown={handlePanStart}
+        onPointerMove={handlePanMove}
+        onPointerUp={handlePanEnd}
+        onPointerLeave={handlePanEnd}
+        onDoubleClick={handleDoubleClick}
+      >
+        {/* Panned content */}
         <div
-          className="rounded-3xl p-8 sm:p-10"
+          className="absolute inset-0 flex items-center justify-center"
           style={{
-            background: stageBg,
-            border: `1px solid ${stageBorder}`,
-            transition: "background 0.2s ease, border-color 0.2s ease",
+            transform: `translate(${pan.x}px, ${pan.y}px)`,
           }}
         >
-          {shape === "box" && (
-            <div
-              className="w-32 h-32 rounded-2xl"
-              style={{
-                background: material.elementBg,
-                boxShadow: shadowValue,
-                transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
-                ...(material.elementExtra
-                  ? Object.fromEntries(
-                      material.elementExtra
-                        .split(";")
-                        .filter(Boolean)
-                        .map((s) => {
-                          const [k, ...v] = s.split(":");
-                          return [k.trim(), v.join(":").trim()];
-                        }),
-                    )
-                  : {}),
-              }}
+          {/* Light source overlay (moves with canvas) */}
+          {lightState && onLightChange && (
+            <LightSourceOverlay
+              lightState={lightState}
+              onChange={onLightChange}
             />
           )}
 
-          {shape === "circle" && (
-            <div
-              className="w-32 h-32 rounded-full"
-              style={{
-                background: material.elementBg,
-                boxShadow: shadowValue,
-                transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
-                ...(material.elementExtra
-                  ? Object.fromEntries(
-                      material.elementExtra
-                        .split(";")
-                        .filter(Boolean)
-                        .map((s) => {
-                          const [k, ...v] = s.split(":");
-                          return [k.trim(), v.join(":").trim()];
-                        }),
-                    )
-                  : {}),
-              }}
-            />
-          )}
+          {/* Centered preview element */}
+          <div
+            className="rounded-3xl p-8 sm:p-10"
+            style={{
+              background: stageBg,
+              border: `1px solid ${stageBorder}`,
+              transition: "background 0.2s ease, border-color 0.2s ease",
+            }}
+          >
+            {shape === "box" && (
+              <div
+                className="w-32 h-32 rounded-2xl"
+                style={{
+                  background: material.elementBg,
+                  boxShadow: shadowValue,
+                  transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
+                  ...(material.elementExtra
+                    ? Object.fromEntries(
+                        material.elementExtra
+                          .split(";")
+                          .filter(Boolean)
+                          .map((s) => {
+                            const [k, ...v] = s.split(":");
+                            return [k.trim(), v.join(":").trim()];
+                          }),
+                      )
+                    : {}),
+                }}
+              />
+            )}
 
-          {shape === "button" && (
-            <div
-              className="px-8 py-3.5 rounded-full font-semibold text-sm select-none"
-              style={{
-                background: material.elementBg,
-                color: textColor,
-                boxShadow: shadowValue,
-                transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
-                ...(material.elementExtra
-                  ? Object.fromEntries(
-                      material.elementExtra
-                        .split(";")
-                        .filter(Boolean)
-                        .map((s) => {
-                          const [k, ...v] = s.split(":");
-                          return [k.trim(), v.join(":").trim()];
-                        }),
-                    )
-                  : {}),
-              }}
-            >
-              Click me
-            </div>
-          )}
+            {shape === "circle" && (
+              <div
+                className="w-32 h-32 rounded-full"
+                style={{
+                  background: material.elementBg,
+                  boxShadow: shadowValue,
+                  transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
+                  ...(material.elementExtra
+                    ? Object.fromEntries(
+                        material.elementExtra
+                          .split(";")
+                          .filter(Boolean)
+                          .map((s) => {
+                            const [k, ...v] = s.split(":");
+                            return [k.trim(), v.join(":").trim()];
+                          }),
+                      )
+                    : {}),
+                }}
+              />
+            )}
 
-          {shape === "card" && (
-            <div
-              className="w-60 rounded-2xl p-5 flex flex-col gap-3"
-              style={{
-                background: material.elementBg,
-                boxShadow: shadowValue,
-                transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
-                ...(material.elementExtra
-                  ? Object.fromEntries(
-                      material.elementExtra
-                        .split(";")
-                        .filter(Boolean)
-                        .map((s) => {
-                          const [k, ...v] = s.split(":");
-                          return [k.trim(), v.join(":").trim()];
-                        }),
-                    )
-                  : {}),
-              }}
-            >
+            {shape === "button" && (
               <div
-                className="w-9 h-9 rounded-xl"
-                style={{ background: "#EEF2F0" }}
-              />
+                className="px-8 py-3.5 rounded-full font-semibold text-sm select-none"
+                style={{
+                  background: material.elementBg,
+                  color: textColor,
+                  boxShadow: shadowValue,
+                  transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
+                  ...(material.elementExtra
+                    ? Object.fromEntries(
+                        material.elementExtra
+                          .split(";")
+                          .filter(Boolean)
+                          .map((s) => {
+                            const [k, ...v] = s.split(":");
+                            return [k.trim(), v.join(":").trim()];
+                          }),
+                      )
+                    : {}),
+                }}
+              >
+                Click me
+              </div>
+            )}
+
+            {shape === "card" && (
               <div
-                className="h-2.5 rounded-full w-3/4"
-                style={{ background: "#E8ECEA" }}
-              />
-              <div
-                className="h-2 rounded-full w-full"
-                style={{ background: "#F0F3F2" }}
-              />
-              <div
-                className="h-2 rounded-full w-5/6"
-                style={{ background: "#F0F3F2" }}
-              />
-              <div
-                className="h-2 rounded-full w-4/6"
-                style={{ background: "#F0F3F2" }}
-              />
-            </div>
-          )}
+                className="w-60 rounded-2xl p-5 flex flex-col gap-3"
+                style={{
+                  background: material.elementBg,
+                  boxShadow: shadowValue,
+                  transition: "box-shadow 0.2s cubic-bezier(0.16,1,0.3,1)",
+                  ...(material.elementExtra
+                    ? Object.fromEntries(
+                        material.elementExtra
+                          .split(";")
+                          .filter(Boolean)
+                          .map((s) => {
+                            const [k, ...v] = s.split(":");
+                            return [k.trim(), v.join(":").trim()];
+                          }),
+                      )
+                    : {}),
+                }}
+              >
+                <div
+                  className="w-9 h-9 rounded-xl"
+                  style={{ background: "#EEF2F0" }}
+                />
+                <div
+                  className="h-2.5 rounded-full w-3/4"
+                  style={{ background: "#E8ECEA" }}
+                />
+                <div
+                  className="h-2 rounded-full w-full"
+                  style={{ background: "#F0F3F2" }}
+                />
+                <div
+                  className="h-2 rounded-full w-5/6"
+                  style={{ background: "#F0F3F2" }}
+                />
+                <div
+                  className="h-2 rounded-full w-4/6"
+                  style={{ background: "#F0F3F2" }}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
