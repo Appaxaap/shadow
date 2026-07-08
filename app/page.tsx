@@ -168,7 +168,7 @@ export default function Home() {
               />
             </div>
 
-            {/* ─── Left column: layers + controls + tools ─── */}
+            {/* ─── Layout 1: Layers + Controls (left) ─── */}
             <div className="absolute left-3 top-3 bottom-3 w-[270px] flex flex-col gap-2 z-10 pointer-events-none">
               {/* Layers panel */}
               <div
@@ -229,9 +229,16 @@ export default function Home() {
                   </div>
                 </div>
               )}
+            </div>
 
-              {/* Tools section — each tool is its own card */}
-              <div className="shrink-0 flex flex-col gap-2 pointer-events-auto animate-fade-up stagger-2">
+            {/* ─── Layout 2: Tools (bottom center) ─── */}
+            <div
+              className="absolute bottom-3 left-[285px] right-[376px] z-10 animate-fade-up pointer-events-auto overflow-y-auto"
+              style={{
+                maxHeight: "calc(100vh - 200px)",
+              }}
+            >
+              <div className="flex flex-col gap-2">
                 <div
                   style={{
                     filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
@@ -270,7 +277,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* ─── Right: Code output (independent panel) ─── */}
+            {/* ─── Layout 3: Code output (right) ─── */}
             <div
               className="absolute right-3 top-3 bottom-3 w-[360px] z-10 animate-fade-up rounded-2xl overflow-hidden pointer-events-auto"
               style={{
