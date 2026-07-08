@@ -20,7 +20,34 @@ type Props = {
   materialId?: MaterialId;
   onMaterialChange?: (id: MaterialId) => void;
   panUnbounded?: boolean;
+  previewBg?: string;
+  bgId?: string;
+  onBgChange?: (bgId: string) => void;
 };
+
+const PRESET_BG_LIST: { id: string; label: string; css: string }[] = [
+  { id: "light", label: "Light", css: "#F0F3F2" },
+  { id: "white", label: "White", css: "#ffffff" },
+  { id: "dark", label: "Dark", css: "#0e1a1a" },
+  { id: "black", label: "Black", css: "#000000" },
+  { id: "warm-gray", label: "Warm", css: "#F5F0EB" },
+  { id: "cool-gray", label: "Cool", css: "#E8EDF2" },
+  {
+    id: "gradient-sunset",
+    label: "Sunset",
+    css: "linear-gradient(135deg, #f093fb, #f5576c)",
+  },
+  {
+    id: "gradient-ocean",
+    label: "Ocean",
+    css: "linear-gradient(135deg, #4facfe, #00f2fe)",
+  },
+  {
+    id: "gradient-forest",
+    label: "Forest",
+    css: "linear-gradient(135deg, #11998e, #38ef7d)",
+  },
+];
 
 const SHAPES: { label: string; value: PreviewShape }[] = [
   { label: "Box", value: "box" },
@@ -39,6 +66,9 @@ export function ShadowPreview({
   materialId = "paper",
   onMaterialChange,
   panUnbounded = false,
+  previewBg,
+  bgId,
+  onBgChange,
 }: Props) {
   const [shape, setShape] = useState<PreviewShape>("box");
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -133,8 +163,9 @@ export function ShadowPreview({
   const shadowValue = shadowsToCssValue(materialShadows);
   const primaryVisible = shadows.find((s) => s.visible !== false);
 
-  // Canvas and element colors follow the global theme
-  const canvasBg = isLight ? "#F0F3F2" : "#0e1a1a";
+  // Canvas background — custom or theme-based
+  const defaultBg = isLight ? "#F0F3F2" : "#0e1a1a";
+  const canvasBg = previewBg || defaultBg;
   const dotColor = isLight ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.055)";
   const elementBg = "#ffffff";
   const textColor = "#1A2828";
@@ -244,6 +275,49 @@ export function ShadowPreview({
             );
           })}
         </div>
+
+        {/* Background selector */}
+        {onBgChange && (
+          <div
+            className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl mx-auto"
+            style={{
+              background: isLight
+                ? "rgba(255,255,255,0.75)"
+                : "rgba(11,20,20,0.75)",
+              border: "1px solid var(--border)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
+              maxWidth: "calc(100vw - 600px)",
+              overflowX: "auto",
+              scrollbarWidth: "none",
+            }}
+          >
+            {PRESET_BG_LIST.map((b) => {
+              const active = b.id === bgId;
+              return (
+                <button
+                  key={b.id}
+                  onClick={() => onBgChange(b.id)}
+                  className="shrink-0 w-6 h-6 rounded-lg transition-all duration-150 active:scale-90"
+                  style={{
+                    background: b.css,
+                    border: active
+                      ? "2px solid var(--accent)"
+                      : "2px solid transparent",
+                    outline: active
+                      ? "1px solid var(--accent)"
+                      : "1px solid var(--border)",
+                    boxShadow: active
+                      ? "0 0 0 2px var(--bg), 0 0 0 4px var(--accent)"
+                      : "none",
+                  }}
+                  title={b.label}
+                  aria-label={b.label}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Draggable canvas surface */}

@@ -52,6 +52,21 @@ export default function Home() {
   const [isLight, setIsLight] = useState(false);
   const [tab, setTab] = useState<"editor" | "presets" | "scale">("editor");
   const [showPanels, setShowPanels] = useState(true);
+  const [bgId, setBgId] = useState("light");
+
+  // Resolve background CSS value from bgId
+  const bgMap: Record<string, string> = {
+    light: "#F0F3F2",
+    white: "#ffffff",
+    dark: "#0e1a1a",
+    black: "#000000",
+    "warm-gray": "#F5F0EB",
+    "cool-gray": "#E8EDF2",
+    "gradient-sunset": "linear-gradient(135deg, #f093fb, #f5576c)",
+    "gradient-ocean": "linear-gradient(135deg, #4facfe, #00f2fe)",
+    "gradient-forest": "linear-gradient(135deg, #11998e, #38ef7d)",
+  };
+  const previewBg = bgMap[bgId] || bgMap.light;
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -256,6 +271,9 @@ export default function Home() {
                 materialId={materialId}
                 onMaterialChange={setMaterialId}
                 panUnbounded={!showPanels}
+                previewBg={previewBg}
+                bgId={bgId}
+                onBgChange={setBgId}
               />
             </div>
 
