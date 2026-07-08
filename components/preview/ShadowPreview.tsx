@@ -89,6 +89,7 @@ export function ShadowPreview({
     useState<InteractionState>("normal");
   const [elementSize, setElementSize] = useState(128);
   const [elementRotation, setElementRotation] = useState(0);
+  const [splitView, setSplitView] = useState(false);
 
   const handlePanStart = useCallback((e: React.PointerEvent) => {
     isPanning.current = true;
@@ -234,9 +235,9 @@ export function ShadowPreview({
     <div
       className="relative w-full h-full"
       style={{
-        background: canvasBg,
+        background: splitView ? (isLight ? "#EEF2F2" : "#1a2828") : canvasBg,
         transition: "background 0.2s ease",
-        ...dotGrid,
+        ...(splitView ? {} : dotGrid),
       }}
     >
       {/* Floating material + shape selector - centered top overlay (fixed) */}
@@ -352,49 +353,109 @@ export function ShadowPreview({
           </div>
         </div>
 
-        {/* Background selector */}
+        {/* Background selector + Split view toggle */}
         {onBgChange && (
-          <div
-            className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl mx-auto"
-            style={{
-              background: isLight
-                ? "rgba(255,255,255,0.75)"
-                : "rgba(11,20,20,0.75)",
-              border: "1px solid var(--border)",
-              backdropFilter: "blur(8px)",
-              WebkitBackdropFilter: "blur(8px)",
-              maxWidth: "calc(100vw - 600px)",
-              overflowX: "auto",
-              scrollbarWidth: "none",
-            }}
-          >
-            {PRESET_BG_LIST.map((b) => {
-              const active = b.id === bgId;
-              return (
-                <button
-                  key={b.id}
-                  onClick={() => onBgChange(b.id)}
-                  className="shrink-0 w-6 h-6 rounded-lg transition-all duration-150 active:scale-90"
-                  style={{
-                    background: b.css,
-                    border: active
-                      ? "2px solid var(--accent)"
-                      : "2px solid transparent",
-                    outline: active
-                      ? "1px solid var(--accent)"
-                      : "1px solid var(--border)",
-                    boxShadow: active
-                      ? "0 0 0 2px var(--bg), 0 0 0 4px var(--accent)"
-                      : "none",
-                  }}
-                  title={b.label}
-                  aria-label={b.label}
-                />
-              );
-            })}
+          <div className="flex items-center gap-2">
+            <div
+              className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl"
+              style={{
+                background: isLight
+                  ? "rgba(255,255,255,0.75)"
+                  : "rgba(11,20,20,0.75)",
+                border: "1px solid var(--border)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+                maxWidth: "calc(100vw - 640px)",
+                overflowX: "auto",
+                scrollbarWidth: "none",
+              }}
+            >
+              {PRESET_BG_LIST.map((b) => {
+                const active = b.id === bgId;
+                return (
+                  <button
+                    key={b.id}
+                    onClick={() => onBgChange(b.id)}
+                    className="shrink-0 w-6 h-6 rounded-lg transition-all duration-150 active:scale-90"
+                    style={{
+                      background: b.css,
+                      border: active
+                        ? "2px solid var(--accent)"
+                        : "2px solid transparent",
+                      outline: active
+                        ? "1px solid var(--accent)"
+                        : "1px solid var(--border)",
+                      boxShadow: active
+                        ? "0 0 0 2px var(--bg), 0 0 0 4px var(--accent)"
+                        : "none",
+                    }}
+                    title={b.label}
+                    aria-label={b.label}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Split view toggle */}
+            <button
+              onClick={() => setSplitView(!splitView)}
+              className="pointer-events-auto shrink-0 px-2.5 py-1.5 text-[10px] font-semibold rounded-xl transition-all active:scale-95"
+              style={{
+                background: splitView
+                  ? "color-mix(in srgb, var(--accent) 12%, transparent)"
+                  : isLight
+                    ? "rgba(255,255,255,0.75)"
+                    : "rgba(11,20,20,0.75)",
+                border: `1px solid ${splitView ? "color-mix(in srgb, var(--accent) 25%, transparent)" : "var(--border)"}`,
+                color: splitView ? "var(--accent)" : "var(--text-muted)",
+                backdropFilter: "blur(8px)",
+                WebkitBackdropFilter: "blur(8px)",
+              }}
+              title="Compare shadow on dark + light backgrounds"
+            >
+              {splitView ? "☀🌙 Split" : "☀🌙"}
+            </button>
           </div>
         )}
       </div>
+
+      {/* Split view overlay when active */}
+      {splitView && (
+        <div className="absolute inset-0 z-[5] pointer-events-none flex">
+          <div
+            className="h-full"
+            style={{
+              width: "50%",
+              background: isLight ? "#1a2828" : "#1a2828",
+            }}
+          />
+          <div
+            className="h-full"
+            style={{
+              width: "50%",
+              background: isLight ? "#EEF2F2" : "#EEF2F2",
+            }}
+          />
+          {/* Divider line */}
+          <div
+            className="absolute top-0 bottom-0 left-1/2 w-px"
+            style={{ background: "var(--accent)" }}
+          />
+          {/* Labels */}
+          <span
+            className="absolute top-2 left-3 text-[9px] font-semibold uppercase tracking-wider"
+            style={{ color: "rgba(255,255,255,0.35)" }}
+          >
+            Dark
+          </span>
+          <span
+            className="absolute top-2 right-3 text-[9px] font-semibold uppercase tracking-wider"
+            style={{ color: "rgba(0,0,0,0.25)" }}
+          >
+            Light
+          </span>
+        </div>
+      )}
 
       {/* Draggable canvas surface */}
       <div
