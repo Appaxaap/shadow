@@ -234,11 +234,11 @@ export function ShadowPreview({
       }}
     >
       {/* Floating material + shape selector - centered top overlay (fixed) */}
-      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex flex-col gap-1.5 items-center pointer-events-none">
+      <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex flex-col gap-1.5 items-center pointer-events-none max-w-[95vw] sm:max-w-none">
         {/* Material selector */}
         {onMaterialChange && (
           <div
-            className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl"
+            className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl overflow-x-auto"
             style={{
               background: isLight
                 ? "rgba(255,255,255,0.75)"
@@ -246,6 +246,8 @@ export function ShadowPreview({
               border: "1px solid var(--border)",
               backdropFilter: "blur(8px)",
               WebkitBackdropFilter: "blur(8px)",
+              scrollbarWidth: "none",
+              WebkitOverflowScrolling: "touch",
             }}
           >
             {MATERIALS.map((m) => {
@@ -254,7 +256,7 @@ export function ShadowPreview({
                 <button
                   key={m.id}
                   onClick={() => onMaterialChange(m.id)}
-                  className="px-2 py-1.5 text-xs font-semibold rounded-xl transition-all"
+                  className="shrink-0 px-2 py-1.5 text-xs font-semibold rounded-xl transition-all flex items-center gap-1"
                   style={{
                     background: active
                       ? "var(--surface-raised)"
@@ -275,7 +277,7 @@ export function ShadowPreview({
                   >
                     {m.badge}
                   </span>
-                  <span>{m.name}</span>
+                  <span className="hidden sm:inline">{m.name}</span>
                 </button>
               );
             })}
@@ -283,7 +285,10 @@ export function ShadowPreview({
         )}
 
         {/* Interaction state toggles + Shape row */}
-        <div className="flex items-center gap-2">
+        <div
+          className="flex items-center gap-2 max-w-full overflow-x-auto"
+          style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
+        >
           {/* Interaction states */}
           <div
             className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl"
@@ -357,7 +362,10 @@ export function ShadowPreview({
 
         {/* Background selector + Split view toggle */}
         {onBgChange && (
-          <div className="flex items-center gap-2">
+          <div
+            className="flex items-center gap-2 max-w-full overflow-x-auto"
+            style={{ scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
+          >
             <div
               className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl"
               style={{
@@ -367,8 +375,9 @@ export function ShadowPreview({
                 border: "1px solid var(--border)",
                 backdropFilter: "blur(8px)",
                 WebkitBackdropFilter: "blur(8px)",
-                maxWidth: "calc(100vw - 640px)",
+                maxWidth: "calc(100vw - 120px)",
                 overflowX: "auto",
+                overflowY: "hidden",
                 scrollbarWidth: "none",
               }}
             >
@@ -633,10 +642,10 @@ export function ShadowPreview({
       </div>
 
       {/* Element size + rotation controls - bottom center */}
-      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-30 animate-fade-up">
+      <div className="absolute bottom-16 left-1/2 -translate-x-1/2 z-30 animate-fade-up max-w-[95vw]">
         {/* Rotation buttons */}
         <div
-          className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl mb-1.5 mx-auto w-fit"
+          className="pointer-events-auto flex items-center gap-0.5 p-0.5 rounded-xl mb-1.5 mx-auto w-fit overflow-x-auto"
           style={{
             background: isLight
               ? "rgba(255,255,255,0.75)"
@@ -644,6 +653,7 @@ export function ShadowPreview({
             border: "1px solid var(--border)",
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
+            scrollbarWidth: "none",
           }}
         >
           <span
@@ -678,7 +688,7 @@ export function ShadowPreview({
           })}
         </div>
         <div
-          className="pointer-events-auto flex items-center gap-2 px-3 py-1.5 rounded-xl"
+          className="pointer-events-auto flex items-center gap-2 px-3 py-1.5 rounded-xl overflow-x-auto"
           style={{
             background: isLight
               ? "rgba(255,255,255,0.75)"
@@ -686,6 +696,7 @@ export function ShadowPreview({
             border: "1px solid var(--border)",
             backdropFilter: "blur(8px)",
             WebkitBackdropFilter: "blur(8px)",
+            scrollbarWidth: "none",
           }}
         >
           {/* Preset sizes */}
