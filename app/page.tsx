@@ -168,7 +168,7 @@ export default function Home() {
               />
             </div>
 
-            {/* ─── Left column: layers + controls (stacked, no overlap) ─── */}
+            {/* ─── Left column: layers + controls + tools ─── */}
             <div className="absolute left-3 top-3 bottom-3 w-[270px] flex flex-col gap-2 z-10 pointer-events-none">
               {/* Layers panel */}
               <div
@@ -229,62 +229,32 @@ export default function Home() {
                   </div>
                 </div>
               )}
-            </div>
 
-            {/* ─── Right column: code (top) + tools (bottom) ─── */}
-            <div className="absolute right-3 top-3 bottom-3 w-[340px] z-10 flex flex-col gap-2">
-              {/* Code output — primary, takes 60% */}
-              <div
-                className="flex-[3] min-h-0 rounded-2xl overflow-hidden pointer-events-auto animate-fade-up"
-                style={{
-                  filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
-                }}
-              >
-                <CodeOutput shadows={displayShadows} />
-              </div>
-
-              {/* Tools — secondary, scrollable */}
-              <div
-                className="flex-[2] min-h-0 overflow-y-auto flex flex-col gap-2 pr-0.5 pointer-events-auto animate-fade-up stagger-2"
-                style={{
-                  scrollbarWidth: "thin",
-                  scrollbarColor: "rgba(255,255,255,0.08) transparent",
-                }}
-              >
-                {/* Natural Language */}
+              {/* Tools section — each tool is its own card */}
+              <div className="shrink-0 flex flex-col gap-2 pointer-events-auto animate-fade-up stagger-2">
                 <div
-                  className="shrink-0"
                   style={{
                     filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
                   }}
                 >
                   <NaturalLanguageInput onApply={loadPreset} />
                 </div>
-
-                {/* Depth Meter */}
                 <div
-                  className="shrink-0"
                   style={{
                     filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
                   }}
                 >
                   <DepthMeter onApply={loadPreset} />
                 </div>
-
-                {/* Shadow DNA */}
                 <div
-                  className="shrink-0"
                   style={{
                     filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
                   }}
                 >
                   <ShadowDNA shadows={shadows} onLoadDNA={loadPreset} />
                 </div>
-
-                {/* Shadow Palette */}
                 {activeShadow && (
                   <div
-                    className="shrink-0"
                     style={{
                       filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
                     }}
@@ -298,6 +268,16 @@ export default function Home() {
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* ─── Right: Code output (independent panel) ─── */}
+            <div
+              className="absolute right-3 top-3 bottom-3 w-[360px] z-10 animate-fade-up rounded-2xl overflow-hidden pointer-events-auto"
+              style={{
+                filter: "drop-shadow(0 8px 32px rgba(0,0,0,0.35))",
+              }}
+            >
+              <CodeOutput shadows={displayShadows} />
             </div>
           </div>
         )}
